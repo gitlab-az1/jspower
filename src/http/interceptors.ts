@@ -5,8 +5,8 @@ import { isBoolean, isObject, isPlainObject } from '../utils/is';
 
 
 interface InterceptorHandler<T> {
-  readonly fulfilled: ((data: T) => void | Promise<void>);
-  readonly rejected: ((reason?: string | Error) => void | Promise<void>);
+  readonly fulfilled: ((data: T) => T | Promise<T>);
+  readonly rejected: ((reason?: string | Error) => string | Error | Promise<string | Error | undefined> | undefined);
   readonly synchronous: boolean;
   readonly index: number;
 }
@@ -24,7 +24,6 @@ type UseInterceptorOptions = {
  * 
  * @copyright axios
  * @license MIT
- * @see https://axios-http.com/
  * @see https://github.com/axios/axios/blob/v1.x/lib/core/InterceptorManager.js
  */
 export class InterceptorsManager<T> {
@@ -39,8 +38,8 @@ export class InterceptorsManager<T> {
    * @return {Number} An ID used to remove interceptor later
    */
   public use(
-    fulfilled?: ((data: T) => void | Promise<void>),
-    rejected?: ((reason?: string | Error) => void | Promise<void>),
+    fulfilled?: ((data: T) => T | Promise<T>),
+    rejected?: ((reason?: string | Error) => string | Error | Promise<string | Error | undefined> | undefined),
     options?: UseInterceptorOptions,
   ): number {
     const index = this.handlers.length;

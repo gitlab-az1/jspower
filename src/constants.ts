@@ -10,6 +10,13 @@ export const root = process.cwd();
 export const isProduction = (process.env.NODE_ENV === 'production' ||
   process.env.NEXT_PUBLIC_NODE_ENV === 'production');
 
+
+export const isNode = (typeof process !== 'undefined' &&
+  Object.prototype.toString.call(process) === '[object process]' &&
+  process.release &&
+  process.release.name === 'node');
+
+
 /**
  * permission for files created by the app `[chmod 644]`.
  * 
@@ -57,6 +64,7 @@ export const FILE_PERMISSION = 0o644;
  * ```
  */
 export const FOLDER_PERMISSION = 0o755;
+
 
 
 export default Object.freeze({

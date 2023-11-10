@@ -34,4 +34,20 @@ describe('http/headers', () => {
     expect(headers.get('Content-Type')).toBe('application/json');
     expect(headers.get('Content-Length')).toBe('1024');
   });
+
+  test('Headers to object should return an object with all headers in the instance', () => {
+    const iterableHeaders: [string, string][] = [
+      ['Content-Type', 'application/json'],
+      ['Content-Length', '1024'],
+    ];
+
+    const headers = Headers.from(iterableHeaders);
+    const obj = headers.toObject();
+
+    expect(headers.get('Content-Type')).toBe('application/json');
+    expect(headers.get('Content-Length')).toBe('1024');
+
+    expect(obj['Content-Type']).toBe('application/json');
+    expect(obj['Content-Length']).toBe('1024');
+  });
 });

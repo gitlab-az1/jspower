@@ -10,7 +10,6 @@ import { assertString } from '../utils/assertions';
  * 
  * @copyright axios
  * @license MIT
- * @see https://axios-http.com/
  * @see https://github.com/axios/axios/blob/v1.x/lib/core/AxiosHeaders.js
  */
 export const isValidHeaderName = (str: string): boolean => /^[-_a-zA-Z0-9^`|~,!#$%&'*+.]+$/.test(str.trim());
@@ -23,7 +22,6 @@ export const isValidHeaderName = (str: string): boolean => /^[-_a-zA-Z0-9^`|~,!#
  * 
  * @copyright axios
  * @license MIT
- * @see https://axios-http.com/
  * @see https://github.com/axios/axios/blob/v1.x/lib/core/AxiosHeaders.js
  */
 export function normalizeHeader(header: any): string | undefined {
@@ -39,7 +37,6 @@ export function normalizeHeader(header: any): string | undefined {
  * 
  * @copyright axios
  * @license MIT
- * @see https://axios-http.com/
  * @see https://github.com/axios/axios/blob/v1.x/lib/core/AxiosHeaders.js
  */
 export function formatHeader(header: string): string {
@@ -127,7 +124,7 @@ export class Headers {
       for(const [name, value] of thing.entries()) {
         headers.set(name, value);
       }
-    } else if(Array.isArray(thing)) {
+    } else if(isArray(thing)) {
       for(const [name, value] of thing) {
         headers.set(name, value);
       }
@@ -168,6 +165,7 @@ export class Headers {
     if(name.trim().length < 1 || value.trim().length < 1) return;
     if(typeof this.#headers[name] !== 'undefined' && override !== true) return;
     
+    (this as unknown as Dict<any>)[name] = value;
     this.#headers[name] = value;
   }
 
@@ -333,12 +331,11 @@ export class Headers {
    * @returns {HttpHeaders} 
    */
   public toObject(): HttpHeaders {
-    const obj = Object.create(null);
+    const obj: Dict<string> = {};
 
-    this.forEach((value, header) => {
-      if(!value) return;
-      obj[header] = isArray(value) ? value.join(', ') : value;
-    });
+    for(const [name, value] of this.entries()) {
+      obj[name] = value;
+    }
 
     return obj;
   }

@@ -132,4 +132,4 @@ dist
 yarn*
 .vscode/**/*
 *.py
-/test.js
+/test.[j|t]s

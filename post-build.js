@@ -24,15 +24,15 @@ async function recursiveRemoveDirectoryFiles(dir) {
 }
 
 
-async function recursiveRemoveTestFiles(dir) {
+async function recursiveRemoveTestFilesAndTypes(dir) {
   if(!fs.existsSync(dir)) return;
 
   for(const filename of (await fs.promises.readdir(dir))) {
     const stats = await fs.promises.stat(path.join(dir, filename));
     
     if(stats.isDirectory()) {
-      await recursiveRemoveTestFiles(path.join(dir, filename));
-    } else if(/.spec./.test(filename)) {
+      await recursiveRemoveTestFilesAndTypes(path.join(dir, filename));
+    } else if(/.spec./.test(filename)/* || filename === '_types.js'*/) {
       await fs.promises.unlink(path.join(dir, filename));
     }
   }
@@ -51,7 +51,7 @@ async function main() {
     await fs.promises.copyFile(current, path.join(buildDir, 'types', item));
   }
 
-  await recursiveRemoveTestFiles(buildDir);
+  await recursiveRemoveTestFilesAndTypes(buildDir);
 }
 
 main().catch(console.error);

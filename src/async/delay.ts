@@ -1,0 +1,1 @@
+export default ((amount: number = 750) => new Promise(resolve => setTimeout(resolve, amount)));

@@ -1,0 +1,1 @@
+export type Duration = number | `${number}s` | `${number}ms`;
