@@ -9,6 +9,7 @@ export class Exception extends Error {
 
   constructor(message?: string, contextObject?: Dict<unknown>) {
     super(message);
+    
     this.message = message ?? '';
     this.name = 'Exception';
 

@@ -77,6 +77,13 @@ export class Vector {
     }
 
     const mag = this.magnitude();
+
+    if(mag === 0) {
+      throw new Exception('Cannot normalize a zero vector', {
+        reason: 'division by zero',
+      });
+    }
+
     return new Vector(this.x / mag, this.y / mag, this.z / mag);
   }
 
@@ -151,8 +158,8 @@ export class Vector {
   }
 
   /**
-     * Freeze the current vector to prevent modifications.
-     */
+   * Freeze the current vector to prevent modifications.
+   */
   public freeze(): void {
     this.#freezed = true;
   }

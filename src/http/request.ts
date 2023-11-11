@@ -49,6 +49,10 @@ export class Request {
     this.#props.url = url;
   }
 
+  public get delay(): number | undefined {
+    return this.#props.delay;
+  }
+
   public get method(): HttpMethod {
     return this.#props.method;
   }

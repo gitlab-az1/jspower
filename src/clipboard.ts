@@ -208,6 +208,15 @@ export class VirtualClipboard {
     }
 
     if(!item) return null;
+
+    if(item.maxAccessCount && item.accessCount && item.accessCount >= item.maxAccessCount) return (await ((async () => {
+      await this.removeItem(item.id);
+      return null;
+    }))());
+
+    item.accessCount = item.accessCount ? item.accessCount + 1 : 1;
+    await this._saveContext();
+
     if(!item.expireAfter) return item;
 
     if(Date.now() < item.expireAfter) return item;
@@ -229,6 +238,15 @@ export class VirtualClipboard {
 
     const item = this.#items.find(item => item.id === id);
     if(!item) return null;
+
+    if(item.maxAccessCount && item.accessCount && item.accessCount >= item.maxAccessCount) return (await ((async () => {
+      await this.removeItem(item.id);
+      return null;
+    }))());
+
+    item.accessCount = item.accessCount ? item.accessCount + 1 : 1;
+    await this._saveContext();
+
     if(!item.expireAfter) return item;
 
     if(Date.now() < item.expireAfter) return item;

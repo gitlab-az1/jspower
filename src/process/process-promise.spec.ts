@@ -1,7 +1,7 @@
 import { Process } from './core';
 
 
-describe('[module/internal:processes] process-promise', () => {
+describe('process/core process-promise', () => {
   test('it should be ok', () => {
     expect(Math.sqrt(25)).toBe(5);
   });

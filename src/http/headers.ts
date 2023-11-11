@@ -358,11 +358,11 @@ export class Headers {
     return this.entries().map(([name, value]) => `${name}: ${value}`).join('\n');
   }
 
-  [Symbol.iterator](): IterableIterator<[string, string]> {
+  public [Symbol.iterator](): IterableIterator<[string, string]> {
     return Object.entries(this.toObject() as unknown as Dict<string>)[Symbol.iterator]();
   }
 
-  get [Symbol.toStringTag](): string {
+  public get [Symbol.toStringTag](): string {
     return 'Headers';
   }
 }

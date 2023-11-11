@@ -415,6 +415,18 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     }
 
     /**
+     * Get a random integer number between `start` and `end`.
+     * 
+     * @param {number} start 
+     * @param {number} end 
+     * @param {string} round 
+     * @returns {number}
+     */
+    public static integer(start: number, end?: number): number {
+      return random.uniform(start, end, 'round');
+    }
+
+    /**
      * Get a random number between `start` and `end`.
      * 
      * @param {number} start 
@@ -459,7 +471,7 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
      * @param {any[]} arr 
      * @returns {any}
      */
-    public static choice<T>(arr: ReadonlyArray<T>): T {
+    public static choose<T>(arr: ReadonlyArray<T>): T {
       const i = floor(pseudorand() * arr.length);
       return arr[i];
     }

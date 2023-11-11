@@ -1,4 +1,5 @@
 import { ssrSafeWindow } from '../ssr';
+import CryptoJS from 'crypto-js';
 
 
 export class Crypto {
@@ -54,6 +55,37 @@ export class Crypto {
       d = Math.floor(d / 16);
       
       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  /**
+   * Provides an asynchronous Password-Based Key Derivation Function 2 (PBKDF2) implementation
+   * 
+   * @param {string} thing 
+   * @param {string} key 
+   * @returns 
+   */
+  public static async pbkdf2(thing: string, key: string) {
+    if(ssrSafeWindow) return CryptoJS.PBKDF2(thing, key, {
+      iterations: 100000,
+      keySize: 64,
+      hasher: CryptoJS.algo.SHA512,
+    }).toString(CryptoJS.enc.Hex);
+
+    const __crypto = await import('node:crypto');
+
+    return new Promise((resolve, reject) => {
+      __crypto.pbkdf2(
+        thing,
+        key,
+        100000,
+        64,
+        'sha512',
+        (err, buffer) => {
+          if(err) return reject(err);
+          resolve(buffer.toString('hex'));
+        } // eslint-disable-line comma-dangle
+      );
     });
   }
 }
