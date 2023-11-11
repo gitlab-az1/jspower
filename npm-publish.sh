@@ -3,6 +3,8 @@ mkdir ./__build__/
 
 git clone https://github.com/gitlab-az1/jspower.git ./__build__/
 
+cd ./__build__/
+
 yarn install
 yarn build
 
