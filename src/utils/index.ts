@@ -4,6 +4,7 @@ export * as is from './is';
 export { Pair } from './pair';
 export * as string from './string';
 export * as platform from './platform';
+export { default as wordlist } from './wordlist';
 
 
 /**
