@@ -1,3 +1,8 @@
+rm -rf ./__build__/
+mkdir ./__build__/
+
+git clone https://github.com/gitlab-az1/jspower.git ./__build__/
+
 yarn install
 yarn build
 
