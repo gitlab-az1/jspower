@@ -1,6 +1,8 @@
 rm -rf ./__build__/
 mkdir ./__build__/
 
+clear
+
 git clone https://github.com/gitlab-az1/jspower.git ./__build__/
 
 cd ./__build__/
@@ -25,6 +27,6 @@ cd ..
 rm -rf ./dist/
 rm -rf ./package.json
 
-mv ./pkg.jsonbuild ./package.json
+mv ./package.build.json ./package.json
 
 npm publish
