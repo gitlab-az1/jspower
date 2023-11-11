@@ -1,6 +1,6 @@
 {
   "name": "tsdk",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/gitlab-az1/tsdk.git",
   "author": "gitlab-az1 <gitlab.az1@gmail.com>",

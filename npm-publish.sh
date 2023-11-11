@@ -39,6 +39,6 @@ rm -rf ./package.json
 
 mv ./package.build.json ./package.json
 
-npm publish || cleanup
+npm publish --access public || cleanup
 
 cleanup
