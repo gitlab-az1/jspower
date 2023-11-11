@@ -93,7 +93,7 @@ export class VirtualClipboard {
 
   constructor(storageKey?: string) {
     if(!ssrSafeDocument) {
-      throw new Exception('VirtualClipboard can only be used in server side rendering');
+      throw new Exception('VirtualClipboard can not be used in server side rendering');
     }
 
     assertString(storageKey);
