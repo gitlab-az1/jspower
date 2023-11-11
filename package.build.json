@@ -1,8 +1,8 @@
 {
-  "name": "jspower",
+  "name": "tsdk",
   "version": "1.0.3",
   "main": "index.js",
-  "repository": "https://github.com/gitlab-az1/jspower.git",
+  "repository": "https://github.com/gitlab-az1/tsdk.git",
   "author": "gitlab-az1 <gitlab.az1@gmail.com>",
   "license": "GPL-2.0-only",
   "engines": {
