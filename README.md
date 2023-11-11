@@ -135,7 +135,7 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 ### SSR
 - **global constants:** Constants like `ssrSafeDocument` or `ssrSafeLocation` that contain related objects with `undefined` fallbacks for server-side rendering.
 
-- **sage-storage:** A method to store data in the browser using the `localStorage` or `sessionStorage` object without throwing errors in server-side rendering. It also has a method called `jsonSageStorage` for storing and retrieving JSON objects for both `localStorage` and `sessionStorage` safely with a set expiration time for the data.
+- **safe-storage:** A method to store data in the browser using the `localStorage` or `sessionStorage` object without throwing errors in server-side rendering. It also has a method called `jsonSageStorage` for storing and retrieving JSON objects for both `localStorage` and `sessionStorage` safely with a set expiration time for the data.
 
 ### Types
 - Type definitions for the project and some types that can be used in any project.
