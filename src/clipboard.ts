@@ -118,8 +118,8 @@ export class VirtualClipboard {
     
     this.#storageKey = storageKey ?? '_vclipboard';
     this.#readyState = ReadyState.Uninitialized;
+    this.#events = this.#items = [];
     this.#e = new EventEmitter();
-    this.#items = [];
 
     this.#load();
     console.log('[*] Initializing virtual clipboard...');
