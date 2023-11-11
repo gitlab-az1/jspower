@@ -137,5 +137,3 @@ yarn*
 /Rv[0-9].md
 
 /*build*/**/*
-/__build__/**/*
-__build__
