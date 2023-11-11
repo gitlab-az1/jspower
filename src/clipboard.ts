@@ -477,10 +477,11 @@ export class VirtualClipboard {
     const items: SerializedItem[] = [];
 
     const serializeItem = (item: ClipboardItem) => {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
 
         reader.onload = () => {
+          if(!reader.result) return reject(new Exception('Failed to serialize item'));
           const base64Data = (reader.result as string).split(',')[1]; // Get the base64 data
           
           const data = {
@@ -503,13 +504,15 @@ export class VirtualClipboard {
 
           resolve(obj);
         };
+
+        reader.readAsDataURL(item[item.mimeType]);
       });
     };
 
     for(const item of this.getItems()) {
       await serializeItem(item);
     }
-
+    
     const storage = jsonSafeStorage('localStorage');
     storage.setItem(this.#storageKey, items);
   }
