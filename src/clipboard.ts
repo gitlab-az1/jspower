@@ -510,9 +510,7 @@ export class VirtualClipboard {
       });
     };
 
-    for(const item of this.getItems()) {
-      await serializeItem(item);
-    }
+    await Promise.all(this.getItems().map(serializeItem));
     
     const storage = jsonSafeStorage('localStorage');
     storage.setItem(this.#storageKey, items);
