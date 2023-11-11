@@ -1,2 +1,2 @@
-export * from './common.d';
-export * from './http.d';
+export * from './common';
+export * from './http';

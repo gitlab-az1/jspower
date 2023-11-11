@@ -1,6 +1,5 @@
 import { EventEmitter, Event as BaseEvent, EventEmitterSubscription } from './events';
 import { jsonSafeStorage, ssrSafeDocument } from './ssr';
-import { assertString } from './utils/assertions';
 import { Exception } from './errors/exception';
 import { Crypto, Hash } from './crypto';
 import { is } from './utils';
@@ -116,8 +115,6 @@ export class VirtualClipboard {
     if(!ssrSafeDocument) {
       throw new Exception('VirtualClipboard can not be used in server side rendering');
     }
-
-    assertString(storageKey);
     
     this.#storageKey = storageKey ?? '_vclipboard';
     this.#readyState = ReadyState.Uninitialized;
@@ -125,7 +122,7 @@ export class VirtualClipboard {
     this.#items = [];
 
     this.#load();
-    console.time('[*] Initializing virtual clipboard...');
+    console.log('[*] Initializing virtual clipboard...');
   }
 
   async #load(): Promise<void> {
@@ -139,7 +136,7 @@ export class VirtualClipboard {
       this.#readyState = ReadyState.Interactive;
       this.#e.emit('readystatechange', new ReadyStateChageEvent(this));
       
-      console.timeEnd('[*] Virtual clipboard is ready');
+      console.log('[*] Virtual clipboard is ready');
     };
 
     if(!storedItems) return r();
