@@ -1,11 +1,3 @@
-import { ssrSafeWindow } from '../ssr';
-
-if(ssrSafeWindow) {
-  throw new Error('CryptoKey is not available in browser environment');
-}
-
-import crypto from 'node:crypto';
-
 import { Exception } from '../errors';
 import type { Dict } from '../types';
 import { Crypto } from './core';
@@ -68,8 +60,10 @@ export class CryptoKey {
       };
     }
 
+    const _crypto = await import('crypto');
+
     if(algorithmType === 'rsa') return new Promise((resolve, reject) => {
-      crypto.generateKeyPair('rsa', {
+      _crypto.generateKeyPair('rsa', {
         modulusLength: length,
         publicKeyEncoding: { type: 'spki', format: 'pem' },
         privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
@@ -91,7 +85,7 @@ export class CryptoKey {
     });
 
     if(algorithmType === 'ec') return new Promise((resolve, reject) => {
-      crypto.generateKeyPair('ec', {
+      _crypto.generateKeyPair('ec', {
         namedCurve: curveName,
         publicKeyEncoding: { type: 'spki', format: 'pem' },
         privateKeyEncoding: { type: 'pkcs8', format: 'pem' },

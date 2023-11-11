@@ -1,11 +1,3 @@
-import { ssrSafeWindow } from '../../ssr';
-import { isNode } from '../../constants';
-
-if(isNode || !ssrSafeWindow) {
-//   throw new Error('BrowserCryptoKey is not available in Node.JS environment');
-}
-
-
 import { Exception } from '../../errors';
 import type { Dict } from '../../types';
 import { Crypto } from '../core';

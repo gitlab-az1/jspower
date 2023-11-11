@@ -16,7 +16,7 @@ export class Crypto {
     if(ssrSafeWindow) {
       arr = ssrSafeWindow.crypto.getRandomValues(new Uint8Array(byteLength));
     } else {
-      const __crypto = await import('node:crypto');
+      const __crypto = await import('crypto');
       arr = new Uint8Array(__crypto.randomBytes(byteLength));
     }
 
@@ -34,7 +34,7 @@ export class Crypto {
   public static async randomBytes(length: number): Promise<Uint8Array> {
     if(ssrSafeWindow) return ssrSafeWindow.crypto.getRandomValues(new Uint8Array(length));
 
-    const __crypto = await import('node:crypto');
+    const __crypto = await import('crypto');
     return new Uint8Array(__crypto.randomBytes(length));
   }
 
@@ -72,7 +72,7 @@ export class Crypto {
       hasher: CryptoJS.algo.SHA512,
     }).toString(CryptoJS.enc.Hex);
 
-    const __crypto = await import('node:crypto');
+    const __crypto = await import('crypto');
 
     return new Promise((resolve, reject) => {
       __crypto.pbkdf2(

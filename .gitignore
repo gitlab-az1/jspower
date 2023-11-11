@@ -135,3 +135,5 @@ yarn*
 /test.[j|t]s
 *.tmp
 /Rv[0-9].md
+
+/*build*/**/*

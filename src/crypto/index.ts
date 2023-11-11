@@ -11,4 +11,3 @@ export {
 
 export * as symmetric from './symmetric';
 export * as password from './password';
-export * as browser from './browser';
