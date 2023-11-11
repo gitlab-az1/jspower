@@ -13,7 +13,7 @@ mkdir ./__build__/
 
 clear
 
-git clone https://github.com/gitlab-az1/jspower.git ./__build__/
+git clone https://github.com/gitlab-az1/typesdk.git ./__build__/
 
 cd ./__build__/
 
