@@ -244,6 +244,63 @@ export function isPrime(n: number): boolean {
 }
 
 
+/**
+ * Calculates the factorial of a given number.
+ * 
+ * @param x - The number for which to calculate the factorial.
+ * @param verbose - If true, logs the factorial expression and result to the console.
+ * @returns The factorial of the given number.
+ * @throws Will throw an error if 'x' is negative, as factorial is undefined for negative numbers.
+ */
+export function factorial(x: number, verbose: boolean = false): number {
+  // Check if 'x' is negative, as factorial is undefined for negative numbers.
+  if (x < 0) {
+    throw new Error('Cannot calculate factorial of a negative number');
+  }
+
+  // If 'x' is 0, the factorial is 1 by definition.
+  if (x === 0) return 1;
+
+  // Initialize variables for factors and result.
+  const factors = [x];
+  let factor: number,
+    result: number;
+
+  // Initialize factor and result to the initial value of 'x'.
+  [factor, result] = [x, x];
+
+  // Iterate through the factors to calculate the factorial.
+  while (factor > 1) {
+    factor--;
+    result *= factor;
+    factors.push(factor);
+  }
+
+  // If verbose mode is enabled, log the factorial expression and result to the console.
+  if (verbose) {
+    console.log(`${x}! = ${factors.join(' x ')} = ${result}`);
+  }
+
+  // Return the calculated factorial.
+  return result;
+}
+
+
+/**
+ * Rounds a given number to the nearest multiple of itself.
+ * @param x - The number to be rounded.
+ * @returns The rounded number (a multiple of 'x').
+ */
+export function roundToNearestMultiple(x: number): number {
+  // Check if 'multiple' is 0, as rounding to the nearest multiple of 0 is undefined.
+  if (x === 0) {
+    throw new Exception('Cannot round to the nearest multiple of 0.');
+  }
+
+  return nmath.round(x / x) * x;
+}
+
+
 
 /**
  * A lot of  matemathical utils, constants and functions to basically do everything you want.
@@ -1225,7 +1282,7 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     return true;
   }
 
-  
+
   /**
    * Sigmoid activation function. Returns the result of the sigmoid function for the given input.
    *
@@ -1296,6 +1353,65 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     const exps = x.map(Math.exp);
     const sumExps = exps.reduce((acc, val) => acc + val);
     return exps.map((val) => val / sumExps);
+  }
+
+
+
+
+  /**
+   * Calculates the factorial of a given number.
+   * 
+   * @param x - The number for which to calculate the factorial.
+   * @param verbose - If true, logs the factorial expression and result to the console.
+   * @returns The factorial of the given number.
+   * @throws Will throw an error if 'x' is negative, as factorial is undefined for negative numbers.
+   */
+  export function factorial(x: number, verbose: boolean = false): number {
+    // Check if 'x' is negative, as factorial is undefined for negative numbers.
+    if (x < 0) {
+      throw new Error('Cannot calculate factorial of a negative number');
+    }
+
+    // If 'x' is 0, the factorial is 1 by definition.
+    if (x === 0) return 1;
+
+    // Initialize variables for factors and result.
+    const factors = [x];
+    let factor: number,
+      result: number;
+
+    // Initialize factor and result to the initial value of 'x'.
+    [factor, result] = [x, x];
+
+    // Iterate through the factors to calculate the factorial.
+    while (factor > 1) {
+      factor--;
+      result *= factor;
+      factors.push(factor);
+    }
+
+    // If verbose mode is enabled, log the factorial expression and result to the console.
+    if (verbose) {
+      console.log(`${x}! = ${factors.join(' x ')} = ${result}`);
+    }
+
+    // Return the calculated factorial.
+    return result;
+  }
+
+
+  /**
+   * Rounds a given number to the nearest multiple of itself.
+   * @param x - The number to be rounded.
+   * @returns The rounded number (a multiple of 'x').
+   */
+  export function roundToNearestMultiple(x: number): number {
+    // Check if 'multiple' is 0, as rounding to the nearest multiple of 0 is undefined.
+    if (x === 0) {
+      throw new Exception('Cannot round to the nearest multiple of 0.');
+    }
+
+    return nmath.round(x / x) * x;
   }
 }
 

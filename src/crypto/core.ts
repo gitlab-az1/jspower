@@ -65,7 +65,7 @@ export class Crypto {
    * @param {string} key 
    * @returns 
    */
-  public static async pbkdf2(thing: string, key: string) {
+  public static async pbkdf2(thing: string, key: string): Promise<string> {
     if(ssrSafeWindow) return CryptoJS.PBKDF2(thing, key, {
       iterations: 100000,
       keySize: 64,

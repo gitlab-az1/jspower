@@ -20,6 +20,27 @@ export type ClipboardItem = {
   readonly id: string;
 }
 
+type SerializedItem = {
+  readonly signature: string;
+  readonly mimeType: string;
+  maxAccessCount?: number;
+  lastAccessTime?: number;
+  readonly size: number;
+  expireAfter?: number;
+  accessCount?: number;
+  readonly id: string;
+  readonly _blob: {
+    readonly data: {
+      readonly type: string;
+      readonly base64: string;
+    };
+    readonly checksum: {
+      readonly algorithm: 'sha256' | 'sha512';
+      readonly hash: string;
+    };
+  };
+};
+
 
 /* events */
 type EventSubscription = {
@@ -104,11 +125,58 @@ export class VirtualClipboard {
     this.#items = [];
 
     this.#load();
+    console.time('[*] Initializing virtual clipboard...');
   }
 
   async #load(): Promise<void> {
     this.#readyState = ReadyState.Loading;
     this.#e.emit('readystatechange', new ReadyStateChageEvent(this));
+
+    const storage = jsonSafeStorage('localStorage');
+    const storedItems = storage.getItem(this.#storageKey) as SerializedItem[] | undefined;
+
+    const r = () => {
+      this.#readyState = ReadyState.Interactive;
+      this.#e.emit('readystatechange', new ReadyStateChageEvent(this));
+      
+      console.timeEnd('[*] Virtual clipboard is ready');
+    };
+
+    if(!storedItems) return r();
+    if(!Array.isArray(storedItems)) return r();
+
+    for(const item of storedItems) {
+      if(item.expireAfter && Date.now() > item.expireAfter) continue;
+      if(item.maxAccessCount && item.accessCount && item.accessCount >= item.maxAccessCount) continue;
+      
+      if(!['sha256', 'sha512'].includes(item._blob.checksum.algorithm)) continue;
+      const dataHash = Hash[item._blob.checksum.algorithm](JSON.stringify(item._blob.data));
+
+      if(dataHash !== item._blob.checksum.hash) continue;
+      const blob = new Blob([ item._blob.data.base64 ], { type: item._blob.data.type });
+      const blobSign = await this.#getSignature(blob);
+
+      if(blobSign !== item.signature) continue;
+
+      this.#items.push({
+        id: item.id,
+        mimeType: item.mimeType,
+        maxAccessCount: item.maxAccessCount,
+        lastAccessTime: item.lastAccessTime,
+        signature: item.signature,
+        size: blob.size,
+        accessCount: item.accessCount,
+        expireAfter: item.expireAfter,
+        [item.mimeType]: blob,
+      } as unknown as ClipboardItem);
+    }
+
+    return r();
+  }
+
+  async #getSignature(item: Blob): Promise<string> {
+    const buffer = await item.arrayBuffer();
+    return Hash.sha512(new TextDecoder().decode(buffer));
   }
 
   /**
@@ -128,7 +196,7 @@ export class VirtualClipboard {
     const obj = {
       id,
       [mimeType]: blob,
-      signature: '',
+      signature: await this.#getSignature(blob),
       size: blob.size,
       accessCount: 0,
       lastAccessTime: 0,
@@ -215,6 +283,7 @@ export class VirtualClipboard {
     }))());
 
     item.accessCount = item.accessCount ? item.accessCount + 1 : 1;
+    item.lastAccessTime = Date.now();
     await this._saveContext();
 
     if(!item.expireAfter) return item;
@@ -245,6 +314,7 @@ export class VirtualClipboard {
     }))());
 
     item.accessCount = item.accessCount ? item.accessCount + 1 : 1;
+    item.lastAccessTime = Date.now();
     await this._saveContext();
 
     if(!item.expireAfter) return item;
@@ -264,8 +334,8 @@ export class VirtualClipboard {
    */
   public addEventListener<K extends keyof VirtualClipboardEventsMap>(event: K, listener: ((event: VirtualClipboardEventsMap[K]) => unknown | Promise<unknown>)): EventEmitterSubscription {
     const subscription = this.#e.subscribe(event, listener);
-    const signature = Hash.sha512(listener.toString());
-    const id = this.#events.length;
+    const signature = Hash.sha256(listener.toString());
+    const id = (1 + this.#events.length) * 8 / 2;
 
     this.#events.push({
       ...subscription,
@@ -284,7 +354,7 @@ export class VirtualClipboard {
    * @param {Function} listener The listener function to remove
    */
   public removeEventListener<K extends keyof VirtualClipboardEventsMap>(event: K, listener: ((event: VirtualClipboardEventsMap[K]) => unknown | Promise<unknown>)): void {
-    const listenerSignature = Hash.sha512(listener.toString());
+    const listenerSignature = Hash.sha256(listener.toString());
     const index = this.#events.findIndex(subscription => subscription.event === event && subscription.signature === listenerSignature);
 
     if(index < 0) return;
@@ -341,7 +411,7 @@ export class VirtualClipboard {
    */
   public async copyToClipboard(text: string): Promise<void> {
     if(!ssrSafeDocument) {
-      throw new Exception('copyToClipboard can only be used in client side rendering');
+      throw new Exception('copyToClipboard can only be used in client side');
     }
 
     if(this.#readyState !== ReadyState.Interactive) {
@@ -354,9 +424,9 @@ export class VirtualClipboard {
     this.#e.emit('copy', new CopyEvent(item as ClipboardItem));
 
     try {
-      navigator.clipboard.writeText(text);
-    } catch (err) {
-      console.warn(err);
+      await navigator.clipboard.writeText(text);
+    } catch (err: any) {
+      console.warn(`${new Date().getTime()} | [VirtualClipboard warn]: ${err.message || err}`);
 
       const textarea = ssrSafeDocument.createElement('textarea');
       textarea.value = text;
@@ -407,22 +477,6 @@ export class VirtualClipboard {
   }
 
   private async _saveContext(): Promise<void> {
-    type SerializedItem = {
-      readonly signature: string;
-      readonly mimeType: string;
-      maxAccessCount?: number;
-      lastAccessTime?: number;
-      readonly size: number;
-      expireAfter?: number;
-      accessCount?: number;
-      readonly id: string;
-
-      _blob: {
-        type: string;
-        base64: string;
-      };
-    }
-
     const items: SerializedItem[] = [];
 
     const serializeItem = (item: ClipboardItem) => {
@@ -437,12 +491,17 @@ export class VirtualClipboard {
             base64: base64Data,
           };
 
+          const checksum = {
+            algorithm: 'sha512',
+            hash: Hash.sha512(JSON.stringify(data)),
+          } satisfies SerializedItem['_blob']['checksum'];
+
           const obj = { ...item };
           delete obj[item.mimeType];
 
           items.push({
             ...obj,
-            _blob: data,
+            _blob: { data, checksum },
           } satisfies SerializedItem);
 
           resolve(obj);
@@ -455,7 +514,7 @@ export class VirtualClipboard {
     }
 
     const storage = jsonSafeStorage('localStorage');
-    storage.setItem(this.#storageKey, JSON.stringify(items));
+    storage.setItem(this.#storageKey, items);
   }
 }
 
@@ -467,13 +526,13 @@ export class VirtualClipboard {
  */
 export async function copy(text: string): Promise<void> {
   if(!ssrSafeDocument) {
-    throw new Exception('copy can only be used in server side rendering');
+    throw new Exception('copy can not be used in server side rendering');
   }
 
   try {
     await navigator.clipboard.writeText(text);
-  } catch (err) {
-    console.warn(err);
+  } catch (err: any) {
+    console.warn(`${new Date().getTime()} | [warn]: ${err.message || err}`);
     
     const textarea = ssrSafeDocument.createElement('textarea');
     textarea.value = text;
@@ -493,13 +552,13 @@ export async function copy(text: string): Promise<void> {
  */
 export async function paste(): Promise<string> {
   if(!ssrSafeDocument) {
-    throw new Exception('paste can only be used in server side rendering');
+    throw new Exception('paste can not be used in server side rendering');
   }
 
   try {
     return await navigator.clipboard.readText();
-  } catch (err) {
-    console.warn(err);
+  } catch (err: any) {
+    console.warn(`${new Date().getTime()} | [warn]: ${err.message || err}`);
     
     const textarea = ssrSafeDocument.createElement('textarea');
     ssrSafeDocument.body.appendChild(textarea);

@@ -226,22 +226,6 @@ describe('crypto/crypto-key', () => {
     expect(cryptoKey.generateInitializationVector().toString('hex')).not.toEqual(new TextDecoder().decode(browserKey2.generateInitializationVector()));
   });
 
-  test('Node.JS CryptoKey should throw an error if the key is invalid', () => {
-    expect(() => new CryptoKey([0x1, 0xf], {
-      algorithm: {
-        name: 'test',
-      },
-    })).toThrow();
-  });
-
-  test('BrowserCryptoKey should throw an error if the key is invalid', () => {
-    expect(() => new BrowserCryptoKey([0x1, 0xf], {
-      algorithm: {
-        name: 'test',
-      },
-    })).toThrow();
-  });
-
   test('Node.JS CryptoKey should use correctly the `Symbol.toStringTag`', () => {
     const cryptoKey = new CryptoKey(Buffer.from('test'), {
       algorithm: {

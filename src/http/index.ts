@@ -1,6 +1,5 @@
 export * from './core';
 export * from './headers';
-export * from './cookies';
 export * from './request';
 export * from './helpers/url';
 export * from './interceptors';

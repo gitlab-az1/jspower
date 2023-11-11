@@ -7,13 +7,20 @@ import { Headers } from './headers';
 import { delay } from '../async';
 
 
+export type RequestInit = {
+  redirect?: 'follow' | 'manual' | 'error';
+  method: HttpMethod;
+  timeout?: number;
+}
 
 export class Request {
   readonly #_Driver: RequestDriver;
   readonly #props: {
     method: HttpMethod;
     url: string | URL;
+    timeout?: number;
     delay?: number;
+    redirect?: 'follow' | 'manual' | 'error';
   };
 
   public readonly interceptors: {
@@ -29,11 +36,15 @@ export class Request {
 
     this.#props = {
       method: (options?.method ?? 'GET') as HttpMethod,
+      timeout: options?.timeout,
       delay: 0,
       url,
-    };    
+    };
     
-    this.#_Driver = new driver();
+    this.#_Driver = new driver({
+      redirect: options?.redirect,
+      timeout: options?.timeout,
+    });
   }
 
   public get headers(): Headers {
@@ -79,6 +90,12 @@ export class Request {
 
   public setBody(body: XMLHttpRequestBodyInit | Dict<unknown> | Document | ReadableStream): void {
     this.#_Driver.body(body);
+  }
+
+  public setTimeout(value: number): void {
+    if(typeof value !== 'number') return;
+    this.#props.timeout = value;
+    this.#_Driver.timeout(value);
   }
 
   async #DoSendRequest(): Promise<Response> {

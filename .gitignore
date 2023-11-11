@@ -133,3 +133,5 @@ yarn*
 .vscode/**/*
 *.py
 /test.[j|t]s
+*.tmp
+/Rv[0-9].md
