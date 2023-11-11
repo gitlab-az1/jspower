@@ -137,3 +137,4 @@ yarn*
 /Rv[0-9].md
 
 /*build*/**/*
+/pkg.jsonbuild
