@@ -1,3 +1,13 @@
+cleanup() {
+  sleep 0.1
+
+  cd ..
+  rm -rf ./__build__/
+
+  exit 0
+}
+
+
 rm -rf ./__build__/
 mkdir ./__build__/
 
@@ -29,4 +39,6 @@ rm -rf ./package.json
 
 mv ./package.build.json ./package.json
 
-npm publish
+npm publish || cleanup
+
+cleanup

@@ -1,5 +1,5 @@
 {
-  "name": "jspower",
+  "name": "tsdk",
   "version": "1.0.3",
   "main": "dist/index.js",
   "repository": "https://github.com/gitlab-az1/jspower.git",
@@ -26,7 +26,6 @@
     "@types/crypto-js": "^4.2.1",
     "@types/event-stream": "^4.0.4",
     "@types/jest": "^29.5.7",
-    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
@@ -38,7 +37,6 @@
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
-    "event-stream": "^4.0.1",
-    "jsonwebtoken": "^9.0.2"
+    "event-stream": "^4.0.1"
   }
 }

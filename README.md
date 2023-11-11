@@ -1,4 +1,4 @@
-# JSpower - Node.js SDK
+# Tsdk - Node.js SDK
 
 JSpower is a comprehensive Node.js SDK designed for diverse projects. Please note that the project is currently in development, and using it in a production environment is not recommended.
 
