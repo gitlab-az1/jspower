@@ -1,3 +1,7 @@
+#!/bin/bash
+
+
+
 cleanup() {
   sleep 0.1
 
@@ -37,8 +41,18 @@ cd ..
 rm -rf ./dist/
 rm -rf ./package.json
 
+local VERSION=$(cat ./package.build.json | python3 -c "import sys, json; print(json.load(sys.stdin)['version'])")
+
 mv ./package.build.json ./package.json
 
-npm publish --access public || cleanup
+cd ./utils/
+rm -rf ./_appversion.js
 
-cleanup
+touch ./_appversion.js
+echo "export const version = '$VERSION';\nexport default version;" >> ./_appversion.js
+
+cd ..
+
+# npm publish --access public || cleanup
+
+# cleanup
