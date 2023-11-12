@@ -28,6 +28,9 @@ export * as types from './types';
 export * from './utils';
 export * as utils from './utils';
 
+export * from './array';
+export * as array from './array';
+
 
 export {
   ClipboardItem,
