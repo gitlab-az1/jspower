@@ -7,6 +7,16 @@ const fs = require('node:fs');
 const buildDir = path.resolve(process.cwd(), 'dist');
 const srcDir = path.resolve(process.cwd(), 'src');
 
+
+const appVersionScript = `"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.version = exports.default = void 0;
+const version = exports.version = '$ver';
+var _default = exports.default = version;`;
+
 async function recursiveRemoveDirectoryFiles(dir) {
   if(!fs.existsSync(dir)) return;
 
@@ -56,6 +66,12 @@ async function main() {
   }
 
   await recursiveRemoveUnnecessaryFiles(buildDir);
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const pkg = require('./package.build.json');
+  await fs.promises.writeFile(path.join(buildDir, 'utils', '_appversion.js'),
+    appVersionScript.replace('$ver', pkg.version),
+    { encoding: 'utf-8' });
 }
 
 main().catch(console.error);

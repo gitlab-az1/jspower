@@ -4,6 +4,7 @@ import { HTTPError, RequestTimeoutError } from '../../errors/http';
 import { RequestDriver, RequestOptions } from './_types';
 import { assertString } from '../../utils/assertions';
 import { Exception } from '../../errors/exception';
+import { version } from '../../utils/_appversion';
 import { __parseURL } from '../helpers/url';
 import { Response } from '../response';
 import { Headers } from '../headers';
@@ -134,7 +135,7 @@ class FetchDriver implements RequestDriver {
     );
 
     if(!hasUserAgent) {
-      this.#headers.set('User-Agent', 'jspower-http/1.0');
+      this.#headers.set('User-Agent', `jspower-http/${version}`);
     }
 
     const headers: Dict<string> = {};

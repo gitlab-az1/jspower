@@ -185,6 +185,11 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 ### Date and Time (Not Implemented)
 
+### Next.JS (Not Implemented)
+
+### Dotenv
+- Load environment variables from a `.env` file into `process.env`.
+
 
 ## Installation
 
