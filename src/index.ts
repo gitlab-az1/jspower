@@ -31,6 +31,10 @@ export * as utils from './utils';
 export * from './array';
 export * as array from './array';
 
+export * from './dotenv';
+export { default as dotenv } from './dotenv';
+
+
 
 export {
   ClipboardItem,

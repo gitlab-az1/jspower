@@ -190,6 +190,12 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 ### Dotenv
 - Load environment variables from a `.env` file into `process.env`.
 
+### ASCI
+- Constants for ASCII colors and styles.
+
+## Logger
+- A logger class for logging formated messages to the console or a file or database.
+
 
 ## Installation
 

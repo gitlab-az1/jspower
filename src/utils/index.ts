@@ -1,5 +1,6 @@
 import type { GenericFunction } from '../types';
 
+export * from './asci';
 export * as is from './is';
 export { Pair } from './pair';
 export * as string from './string';
