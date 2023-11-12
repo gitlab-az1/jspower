@@ -165,6 +165,23 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 ### Speedometer
 - Calculate data maxRate (Implementation incomplete).
 
+### Array
+- **shuffleArray** Asynchronous shuffle an array.
+
+- **shuffleArraySync** Synchronous shuffle an array.
+
+- **inorderTransversal** Generates an inorder traversal of a multidimensional array using a generator function
+
+- **groupBy** Groups elements of an array based on the result of a grouping function
+
+- **arrayLast** Returns the last element of an array
+
+- **arrayFlat** Flattens a multidimensional array up to a specified depth
+
+- **arrayChunk** Divides an array into chunks of a specified size.
+
+- **ArrayWrapper** A class that wraps an array of numbers and provides utility methods.
+
 
 ## Installation
 

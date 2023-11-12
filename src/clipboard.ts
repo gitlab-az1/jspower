@@ -462,7 +462,7 @@ export class VirtualClipboard {
     if(!virtualClipboardText) return '';
 
     this.#e.emit('paste', new PasteEvent(virtualClipboardText));
-    return virtualClipboardText['mime/type'].text();
+    return virtualClipboardText[virtualClipboardText.mimeType].text();
   }
 
   /**
