@@ -12,7 +12,9 @@ import { assertString } from '../utils/assertions';
  * @license MIT
  * @see https://github.com/axios/axios/blob/v1.x/lib/core/AxiosHeaders.js
  */
-export const isValidHeaderName = (str: string): boolean => /^[-_a-zA-Z0-9^`|~,!#$%&'*+.]+$/.test(str.trim());
+// export const isValidHeaderName = (str: string): boolean => /^[-_a-zA-Z0-9^`|~,!#$%&'*+.]+$/.test(str.trim());
+
+export const isValidHeaderName = (str: string): boolean => typeof str === 'string';
 
 
 /**

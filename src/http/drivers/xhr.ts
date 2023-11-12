@@ -134,7 +134,7 @@ class XHRDriver implements RequestDriver {
       this.#headers.has('User-agent') ||
       this.#headers.has('user-agent'));
 
-    if(!hasUserAgent) {
+    if(!hasUserAgent && ssrSafeDocument?.location.origin.startsWith('https:')) {
       this.#headers.set('User-Agent', 'jspower-http/1.0');
     }
 
