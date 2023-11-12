@@ -195,8 +195,9 @@ export class BrowserCryptoKey {
       throw new Exception('Something went wrong with the key, it is not a Uint8Array');
     }
 
-    const textDecoder = new TextDecoder('utf-8');
-    return textDecoder.decode(this.#key);
+    return Array.prototype.map.call(this.#key, function(byte) {
+      return ('0' + byte.toString(16)).slice(-2);
+    }).join('');
   }
 }
 

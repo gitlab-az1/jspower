@@ -4,7 +4,7 @@ import {
   ASCI_RED,
   ASCI_BRIGHT_YELLOW,
   ASCI_BRIGHT_GREEN,
-  ASCI_BRIGHT_CYAN,
+  ASCI_CYAN,
   ASCI_MAGENTA,
   ASCI_RESET,
 } from '../utils/asci';
@@ -28,7 +28,7 @@ export function formatMessage(message: any, level: string): string {
       color = ASCI_BRIGHT_GREEN;
       break;
     case 'debug':
-      color = ASCI_BRIGHT_CYAN;
+      color = ASCI_CYAN;
       break;
     case 'trace':
       color = ASCI_MAGENTA;

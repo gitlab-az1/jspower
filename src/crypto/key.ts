@@ -295,7 +295,7 @@ export class CryptoKey {
       throw new Exception('Something went wrong with the key, it is not a Buffer');
     }
     
-    return this.#key.toString('utf-8');
+    return this.#key.toString('hex');
   }
 }
 

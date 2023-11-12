@@ -88,4 +88,13 @@ export class Crypto {
       );
     });
   }
+
+  public static async hmac512(data: string, key: string): Promise<string> {
+    if(ssrSafeWindow) return CryptoJS.HmacSHA512(data, key).toString(CryptoJS.enc.Hex);
+    
+    const __crypto = await import('crypto');
+    const hmac = __crypto.createHmac('sha512', key);
+    hmac.update(data);
+    return hmac.digest('hex');
+  }
 }

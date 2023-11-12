@@ -47,7 +47,7 @@ export class AES {
       return ('0' + byte.toString(16)).slice(-2);
     }).join('');
 
-    const signature = await Crypto.pbkdf2(data, text);
+    const signature = await Crypto.hmac512(data, text);
     const h = JSON.stringify({
       ts: new Date().getTime(),
       now: getPreciseTime(),
@@ -69,7 +69,7 @@ export class AES {
     const [hRaw, cRaw] = CryptoJS.AES.decrypt(payload, this.#key.valueOf()).toString(CryptoJS.enc.Utf8).split(AES.#CONTENT_SEPARATOR);
 
     const headers = JSON.parse(hRaw);
-    const hash = await Crypto.pbkdf2(cRaw, text);
+    const hash = await Crypto.hmac512(cRaw, text);
 
     if(headers.signature !== hash) {
       throw new Exception('Invalid payload signature', {
