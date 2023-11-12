@@ -1,14 +1,56 @@
-import { getPreciseTime } from '../utils';
+import { getPreciseTime, is } from '../utils';
 import { Response } from './response';
 import type { Dict } from '../types';
 import { Headers } from './headers';
 
 
-export function powerfetch(url: string | URL, options?: RequestInit): Promise<Response> {
+type RequestOptions = {
+  /** A BodyInit object or null to set request's body. */
+  body?: XMLHttpRequestBodyInit | Dict<unknown> | ReadableStream;
+  /** A Headers object, an object literal, or an array of two-item arrays to set request's headers. */
+  headers?: Dict<string> | Headers | globalThis.Headers;
+  /** A string indicating how the request will interact with the browser's cache to set request's cache. */
+  cache?: RequestCache;
+  /** A string indicating whether credentials will be sent with the request always, never, or only when sent to a same-origin URL. Sets request's credentials. */
+  credentials?: RequestCredentials;
+  /** A cryptographic hash of the resource to be fetched by request. Sets request's integrity. */
+  integrity?: string;
+  /** A boolean to set request's keepalive. */
+  keepalive?: boolean;
+  /** A string to set request's method. */
+  method?: string;
+  /** A string to indicate whether the request will use CORS, or will be restricted to same-origin URLs. Sets request's mode. */
+  mode?: RequestMode;
+  /** A string indicating whether request follows redirects, results in an error upon encountering a redirect, or returns the redirect (in an opaque fashion). Sets request's redirect. */
+  redirect?: RequestRedirect;
+  /** A string whose value is a same-origin URL, "about:client", or the empty string, to set request's referrer. */
+  referrer?: string;
+  /** A referrer policy to set request's referrerPolicy. */
+  referrerPolicy?: ReferrerPolicy;
+  /** An AbortSignal to set request's signal. */
+  signal?: AbortSignal | null;
+  /** Can only be null. Used to disassociate request from any Window. */
+  window?: null;
+}
+
+
+export function powerfetch(url: string | URL, options?: RequestOptions): Promise<Response> {
+  const headers: Dict<any> = {};
+
+  if(options?.headers) {
+    for(const [name, value] of Headers.from(options.headers).entries()) {
+      headers[name] = value;
+    }
+  }
+
+  if(options && options.body && is.isObject(options.body) && is.isPlainObject(options.body)) {
+    options.body = JSON.stringify(options.body);
+  }
+
   return new Promise((resolve, reject) => {
     const startTime = getPreciseTime();
 
-    fetch(url, options).then(res => {
+    fetch(url, Object.assign({}, (options as RequestInit | undefined) ?? {}, { headers })).then(res => {
       res.arrayBuffer().then(buffer => {
         const headers: Dict<string> = {};
 
@@ -32,11 +74,6 @@ export function powerfetch(url: string | URL, options?: RequestInit): Promise<Re
 
 type ClientOptions = {
   defaultHeaders?: Dict<string> | Headers | globalThis.Headers;
-}
-
-type RequestOptions = RequestInit & {
-  body?: XMLHttpRequestBodyInit | Dict<unknown> | ReadableStream;
-  headers?: Dict<string> | Headers | globalThis.Headers;
 }
 
 interface Client {
@@ -276,7 +313,9 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
 }
 
 
-export default Object.freeze({
+const __powerfetch = Object.freeze({
   request: powerfetch,
   create,
 });
+
+export default __powerfetch;
