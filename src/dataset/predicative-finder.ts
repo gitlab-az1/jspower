@@ -64,6 +64,9 @@ export class PredicativeFinder<DataT> {
 
   public bind(dataset: IDatasetLoc<DataT>): void {
     dataset; //#
+    this.#predicate; //#
+    this.#props; //#
+    this.#reducer; //#
   }
 }
 
