@@ -127,7 +127,7 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 - **roundToPowerOfTwo:** Round a number to the nearest power of two.
 
-- **roundToNearestMultiple:** Round a number to the nearest multiple of another number.
+- **roundToNearestMultiple:** Round a number to the nearest multiple of itself.
 
 ### Process
 - **process promise:** Create a fully customizable child process with the `spawn` method and return a promise with the process output.
@@ -194,16 +194,16 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 ### ASCI
 - Constants for ASCII colors and styles.
 
-## Logger
+### Logger
 - A logger class for logging formated messages to the console or a file or database.
 
-## Dataset
+### Dataset
 - **PredicativeFinder** A class for finding items in a dataset based on a predicative function.
 - **DataFrame** A class for storing and manipulating data in a tabular format.
 
-## Data Structures
+### Data Structures
 
-### Tree
+#### Tree
   - **BinaryTree** A class for creating binary trees.
   - **HierarchicalTree** A class for creating hierarchical trees.
 
