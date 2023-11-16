@@ -45,7 +45,8 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 - **UTF-8 (Not Implemented):** Encode and decode UTF-8 strings.
 
-### Database (Coming Soon)
+### Database
+- **Postgres** A class for connecting to a Postgres database and executing queries, get opened connections, check if the database is online and do transactions.
 
 ### Errors
 - **exception:** An exception class for throwing errors with custom messages and context.
@@ -195,6 +196,18 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 ## Logger
 - A logger class for logging formated messages to the console or a file or database.
+
+## Dataset
+- **PredicativeFinder** A class for finding items in a dataset based on a predicative function.
+- **DataFrame** A class for storing and manipulating data in a tabular format.
+
+## Data Structures
+
+### Tree
+  - **BinaryTree** A class for creating binary trees.
+  - **HierarchicalTree** A class for creating hierarchical trees.
+
+- **HashTable** A class for creating hash tables.
 
 
 ## Installation
