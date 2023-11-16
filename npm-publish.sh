@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+set -e
 
 cleanup() {
   sleep 0.1
