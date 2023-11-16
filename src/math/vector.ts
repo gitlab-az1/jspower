@@ -14,12 +14,33 @@ export class Vector {
   #freezed: boolean;
 
   /**
-     * Create a new vector.
-     * 
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} z 
-     */
+   * Creates a new Vector instance from a serialized string representation.
+   * 
+   * @param serialized - The serialized string to be parsed.
+   * @returns A new Vector instance.
+   * @throws Exception if the serialized string is invalid or if the vector plane is not 3D.
+   */
+  public static from(serialized: string): Vector {
+    try {
+      const obj = JSON.parse(serialized);
+
+      if(obj.plane !== '3d') {
+        throw new Exception('Vector plane is not 3D');
+      }
+
+      return new Vector(obj.axis.x, obj.axis.y, obj.axis.z);
+    } catch {
+      throw new Exception('Invalid serialized vector');
+    }
+  }
+
+  /**
+   * Create a new vector.
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   * @param {number} z 
+   */
   constructor(x: number, y: number, z: number) {
     [this.#x, this.#y, this.#z] = [x, y, z];
     this.#freezed = false;
@@ -163,6 +184,24 @@ export class Vector {
   public freeze(): void {
     this.#freezed = true;
   }
+
+  /**
+   * Serializes the Vector instance to a string representation.
+   * 
+   * @returns A serialized string representing the Vector.
+   */
+  public serialize(): string {
+    return JSON.stringify({
+      name: 'Vector',
+      plane: '3d',
+      axis: {
+        x: this.x,
+        y: this.y,
+        z: this.z,
+      },
+    });
+  
+  }
 }
 
 
@@ -170,6 +209,27 @@ export class Vector2D {
   #x: number;
   #y: number;
   #freezed: boolean;
+
+  /**
+   * Creates a new Vector2D instance from a serialized string representation.
+   * 
+   * @param serialized - The serialized string to be parsed.
+   * @returns A new Vector2D instance.
+   * @throws Exception if the serialized string is invalid or if the vector plane is not 2D.
+   */
+  public static from(serialized: string): Vector2D {
+    try {
+      const obj = JSON.parse(serialized);
+
+      if(obj.plane !== '2d') {
+        throw new Exception('Vector plane is not 2D');
+      }
+
+      return new Vector2D(obj.axis.x, obj.axis.y);
+    } catch {
+      throw new Exception('Invalid serialized vector');
+    }
+  }
 
   /**
    * Create a new 2D vector.
@@ -292,5 +352,21 @@ export class Vector2D {
    */
   public freeze(): void {
     this.#freezed = true;
+  }
+
+  /**
+   * Serializes the Vector2D instance to a string representation.
+   * 
+   * @returns A serialized string representing the Vector2D.
+   */
+  public serialize(): string {
+    return JSON.stringify({
+      name: 'Vector2D',
+      plane: '2d',
+      axis: {
+        x: this.x,
+        y: this.y,
+      },
+    });
   }
 }

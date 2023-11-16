@@ -628,6 +628,27 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     #freezed: boolean;
 
     /**
+     * Creates a new Vector instance from a serialized string representation.
+     * 
+     * @param serialized - The serialized string to be parsed.
+     * @returns A new Vector instance.
+     * @throws Exception if the serialized string is invalid or if the vector plane is not 3D.
+     */
+    public static from(serialized: string): Vector {
+      try {
+        const obj = JSON.parse(serialized);
+
+        if (obj.plane !== '3d') {
+          throw new Exception('Vector plane is not 3D');
+        }
+
+        return new Vector(obj.axis.x, obj.axis.y, obj.axis.z);
+      } catch {
+        throw new Exception('Invalid serialized vector');
+      }
+    }
+
+    /**
      * Create a new vector.
      * 
      * @param {number} x 
@@ -677,7 +698,7 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
         throw new Exception('Cannot get magnitude of a freezed vector');
       }
 
-      return sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+      return math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
     /**
@@ -691,6 +712,13 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
       }
 
       const mag = this.magnitude();
+
+      if (mag === 0) {
+        throw new Exception('Cannot normalize a zero vector', {
+          reason: 'division by zero',
+        });
+      }
+
       return new Vector(this.x / mag, this.y / mag, this.z / mag);
     }
 
@@ -770,6 +798,24 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     public freeze(): void {
       this.#freezed = true;
     }
+
+    /**
+     * Serializes the Vector instance to a string representation.
+     * 
+     * @returns A serialized string representing the Vector.
+     */
+    public serialize(): string {
+      return JSON.stringify({
+        name: 'Vector',
+        plane: '3d',
+        axis: {
+          x: this.x,
+          y: this.y,
+          z: this.z,
+        },
+      });
+
+    }
   }
 
 
@@ -777,6 +823,27 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     #x: number;
     #y: number;
     #freezed: boolean;
+
+    /**
+     * Creates a new Vector2D instance from a serialized string representation.
+     * 
+     * @param serialized - The serialized string to be parsed.
+     * @returns A new Vector2D instance.
+     * @throws Exception if the serialized string is invalid or if the vector plane is not 2D.
+     */
+    public static from(serialized: string): Vector2D {
+      try {
+        const obj = JSON.parse(serialized);
+
+        if (obj.plane !== '2d') {
+          throw new Exception('Vector plane is not 2D');
+        }
+
+        return new Vector2D(obj.axis.x, obj.axis.y);
+      } catch {
+        throw new Exception('Invalid serialized vector');
+      }
+    }
 
     /**
      * Create a new 2D vector.
@@ -821,7 +888,7 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
         throw new Exception('Cannot get magnitude of a freezed vector');
       }
 
-      return sqrt(this.x * this.x + this.y * this.y);
+      return math.sqrt(this.x * this.x + this.y * this.y);
     }
 
     /**
@@ -899,6 +966,22 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
      */
     public freeze(): void {
       this.#freezed = true;
+    }
+
+    /**
+     * Serializes the Vector2D instance to a string representation.
+     * 
+     * @returns A serialized string representing the Vector2D.
+     */
+    public serialize(): string {
+      return JSON.stringify({
+        name: 'Vector2D',
+        plane: '2d',
+        axis: {
+          x: this.x,
+          y: this.y,
+        },
+      });
     }
   }
 
