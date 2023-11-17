@@ -1,6 +1,16 @@
 import { Exception } from './errors';
 
 
+export type DateTimeString = 
+  | `${number}ms`
+  | `${number}s`
+  | `${number}m`
+  | `${number}h`
+  | `${number}d`
+  | `${number}w`
+  | `${number}M`
+  | `${number}y`;
+
 /**
  * Parses a string representing a time interval and returns a new Date object.
  *
@@ -8,7 +18,7 @@ import { Exception } from './errors';
  * @param {Date} [baseDate=new Date()] - The base date to calculate the new date from (optional, default is the current date).
  * @returns {Date | null} A new Date object representing the calculated date, or null if parsing fails.
  */
-export function parseTimeString(timeString: string, baseDate?: Date): Date {
+export function parseTimeString(timeString: DateTimeString, baseDate?: Date): Date {
   const regex = /^(\d+)([smhdwMy])$/; // Updated regex to include seconds (s), milliseconds (ms), and months (M)
   const match = timeString.match(regex);
 
