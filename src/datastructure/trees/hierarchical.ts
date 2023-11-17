@@ -15,6 +15,7 @@ export class HierarchicalTreeNode<T> {
   constructor(value: T) {
     this.hash = this.#hash = Hash.sha512(JSON.stringify(value));
     this.#children = [];
+    this.#value = value;
   }
 
   public get value(): T {
