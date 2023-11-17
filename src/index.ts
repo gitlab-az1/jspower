@@ -31,6 +31,15 @@ export * as utils from './utils';
 export * from './array';
 export * as array from './array';
 
+export * from './database';
+export * as database from './database';
+
+export * from './dataset';
+export * as dataset from './dataset';
+
+export * from './datetime';
+export * as datetime from './datetime';
+
 export * from './dotenv';
 export { default as dotenv } from './dotenv';
 

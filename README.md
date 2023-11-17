@@ -184,7 +184,8 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 - **ArrayWrapper** A class that wraps an array of numbers and provides utility methods.
 
 
-### Date and Time (Not Implemented)
+### Date and Time
+- **parseTimeString** Parse a time string into a `Date` object.
 
 ### Next.JS (Not Implemented)
 
