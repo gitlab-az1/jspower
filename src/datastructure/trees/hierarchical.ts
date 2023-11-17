@@ -7,14 +7,18 @@ export const HierarchicalTreeSymbol = Symbol('$HierarchyTree');
 
 
 export class HierarchicalTreeNode<T> {
+  readonly #value: T;
   readonly #hash: string;
-  public readonly value: T;
   public readonly hash: string;
   #children: HierarchicalTreeNode<T>[];
 
   constructor(value: T) {
     this.hash = this.#hash = Hash.sha512(JSON.stringify(value));
     this.#children = [];
+  }
+
+  public get value(): T {
+    return this.#value;
   }
 
   public get contentHash(): string {
