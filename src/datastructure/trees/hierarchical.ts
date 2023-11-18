@@ -9,16 +9,19 @@ export const HierarchicalTreeSymbol = Symbol('$HierarchyTree');
 export class HierarchicalTreeNode<T> {
   readonly #value: T;
   readonly #hash: string;
+  public readonly value: T;
   public readonly hash: string;
   #children: HierarchicalTreeNode<T>[];
+  public c: HierarchicalTreeNode<T>[];
 
   constructor(value: T) {
     this.hash = this.#hash = Hash.sha512(JSON.stringify(value));
+    this.value = this.#value = value;
     this.#children = [];
-    this.#value = value;
+    this.c = [];
   }
 
-  public get value(): T {
+  public get safeValue(): T {
     return this.#value;
   }
 
@@ -32,6 +35,7 @@ export class HierarchicalTreeNode<T> {
     }
 
     this.#children.push(children);
+    this.c = [...this.#children];
   }
 
   public removeChild(children: HierarchicalTreeNode<T> | T) {
@@ -44,6 +48,8 @@ export class HierarchicalTreeNode<T> {
     if(targetIndex >= 0) {
       this.#children.splice(targetIndex, 1);
     }
+
+    this.c = [...this.#children];
   }
 
   public find(value: T): HierarchicalTreeNode<T> | undefined {
