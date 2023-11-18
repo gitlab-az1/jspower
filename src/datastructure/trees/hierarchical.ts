@@ -19,6 +19,22 @@ export class HierarchicalTreeNode<T> {
     this.value = this.#value = value;
     this.#children = [];
     this.c = [];
+
+    if(typeof value === 'object' && 
+      (value as unknown as any).children &&
+      Array.isArray((value as unknown as any).children)) {
+      // -------------------------------------------------------
+      for(let child of (value as unknown as any).children) {
+        if(!(child instanceof HierarchicalTreeNode)) {
+          child = typeof child === 'string' ? JSON.parse(child) : child;
+          child = new HierarchicalTreeNode<T>(child as T);
+        }
+
+        this.#children.push(child);
+      }
+
+      this.c = [...this.#children];
+    }
   }
 
   public get safeValue(): T {
