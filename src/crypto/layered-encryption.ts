@@ -119,7 +119,7 @@ export class LayeredEncryption {
   }
 
   #asymmetricKeyMutation(): string {
-    throw new Error('symmetric key mutation is not implemented yet');
+    throw new Error('asymmetric key mutation is not implemented yet');
   }
 
   #getIVFromInitKey(): string {
