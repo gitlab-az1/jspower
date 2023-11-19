@@ -2,6 +2,15 @@ import { ssrSafeWindow } from '../ssr';
 import CryptoJS from 'crypto-js';
 
 
+export interface Cypher {
+  readonly key: string;
+  readonly name: string;
+  encrypt(data: string): Promise<string>;
+  decrypt<T>(data: string): Promise<T>;
+}
+
+export type CypherAlgorithm = 'aes-256-cbc' | 'secp521r1' | 'secp512k1';
+
 export class Crypto {
 
   /**

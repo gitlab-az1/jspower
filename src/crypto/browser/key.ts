@@ -36,7 +36,6 @@ export class BrowserCryptoKey {
 
     const n = math.roundToPowerOfTwo(len);
     const uint8Array = await Crypto.randomBytes(n);
-    // const keyBuffer = Buffer.from(uint8Array);
 
     return new BrowserCryptoKey(uint8Array, options);
   }
@@ -183,7 +182,7 @@ export class BrowserCryptoKey {
   }
 
   public get [Symbol.toStringTag](): string {
-    return 'BrowserCryptoKey';
+    return '[object BrowserCryptoKey]';
   }
 
   public valueOf(): string {

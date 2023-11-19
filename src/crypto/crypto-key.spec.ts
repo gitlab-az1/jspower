@@ -75,7 +75,7 @@ describe('crypto/crypto-key', () => {
     });
 
     cryptoKey.assertValidity();
-    expect(cryptoKey.valueOf()).toBe('test');
+    expect(cryptoKey.valueOf()).toBe('74657374');
   });
 
   test('BrowserCryptoKey should return correct key value', () => {
@@ -86,7 +86,7 @@ describe('crypto/crypto-key', () => {
     });
 
     cryptoKey.assertValidity();
-    expect(cryptoKey.valueOf()).toBe('test');
+    expect(cryptoKey.valueOf()).toBe('74657374');
   });
 
   test('Node.JS CryptoKey should return correct key algorithm', () => {
@@ -233,7 +233,7 @@ describe('crypto/crypto-key', () => {
       },
     });
 
-    expect(cryptoKey[Symbol.toStringTag]).toBe('CryptoKey');
+    expect(cryptoKey[Symbol.toStringTag]).toBe('[object CryptoKey]');
   });
 
   test('BrowserCryptoKey should use correctly the `Symbol.toStringTag`', () => {
@@ -243,6 +243,6 @@ describe('crypto/crypto-key', () => {
       },
     });
 
-    expect(browserKey[Symbol.toStringTag]).toBe('BrowserCryptoKey');
+    expect(browserKey[Symbol.toStringTag]).toBe('[object BrowserCryptoKey]');
   });
 });

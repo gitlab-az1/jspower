@@ -9,5 +9,10 @@ export {
   CryptoKey,
 } from './key';
 
+export { LayeredEncryption } from './layered-encryption';
+
+export * from './symmetric';
 export * as symmetric from './symmetric';
+
+export * from './password';
 export * as password from './password';

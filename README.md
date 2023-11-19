@@ -19,6 +19,8 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
   - ECDH
   - RSA
 
+- **LayeredEncryption** A class for encrypting and decrypting data with multiple layers of encryption that supports both symmetric and asymmetric encryption. __(asymmetric encryption is not implemented yet)__
+
 - **Symmetric**
   - **AES:** Encryption and decryption with payload signature.
 

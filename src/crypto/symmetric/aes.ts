@@ -1,9 +1,9 @@
 import { assertString } from '../../utils/assertions';
 import { BrowserCryptoKey } from '../browser/key';
 import { getPreciseTime } from '../../utils';
+import { Crypto, Cypher } from '../core';
 import { Exception } from '../../errors';
 import { CryptoKey } from '../key';
-import { Crypto } from '../core';
 import CryptoJS from 'crypto-js';
 
 
@@ -85,6 +85,43 @@ export class AES {
       currentTimestamp: new Date().getTime(),
       encryptionTimestamp: headers.ts,
     }) as Decrypted<T>;
+  }
+}
+
+
+export class AESCypher implements Cypher {
+  readonly #aes: AES;
+  readonly #name: 'aes-256-cbc';
+  readonly #key: CryptoKey | BrowserCryptoKey;
+
+  constructor(key: CryptoKey | BrowserCryptoKey) {
+    if(!(key instanceof CryptoKey)
+      && !(key instanceof BrowserCryptoKey)) {
+      throw new Exception('Invalid crypto key');
+    }
+    
+    this.#key = key;
+    this.#name = 'aes-256-cbc';
+
+    key.assertValidity();
+    this.#aes = new AES(key);
+  }
+
+  public get name(): 'aes-256-cbc' {
+    return this.#name;
+  }
+
+  public get key() {
+    return this.#key.valueOf();
+  }
+
+  public encrypt(data: any): Promise<string> {
+    return this.#aes.encrypt(data);
+  }
+
+  public async decrypt<T>(data: string): Promise<T> {
+    const decrypted = await this.#aes.decrypt<T>(data);
+    return decrypted.payload;
   }
 }
 

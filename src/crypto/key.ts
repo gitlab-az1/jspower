@@ -85,6 +85,8 @@ export class CryptoKey {
     });
 
     if(algorithmType === 'ec') return new Promise((resolve, reject) => {
+      if(!_crypto.getCurves().includes(curveName)) return reject(new Exception(`Invalid curve name "${curveName}"`));
+
       _crypto.generateKeyPair('ec', {
         namedCurve: curveName,
         publicKeyEncoding: { type: 'spki', format: 'pem' },
@@ -283,7 +285,7 @@ export class CryptoKey {
   }
 
   public get [Symbol.toStringTag](): string {
-    return 'CryptoKey';
+    return '[object CryptoKey]';
   }
 
   public valueOf(): string {
