@@ -5,4 +5,5 @@ export interface Logger {
   error(message: any): void;
   debug(message: any): void;
   trace(message: any): void;
+  fatal(message: any): void;
 }

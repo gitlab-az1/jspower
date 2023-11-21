@@ -27,6 +27,10 @@ export default (function(): Logger {
     console.log(formatMessage(message, 'trace'));
   };
 
+  const fatal = (message: any): void => {
+    console.log(formatMessage(message, 'fatal'));
+  };
+
   return Object.freeze({
     info,
     success,
@@ -34,5 +38,6 @@ export default (function(): Logger {
     error,
     debug,
     trace,
+    fatal,
   });
 });

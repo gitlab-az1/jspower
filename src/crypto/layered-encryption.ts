@@ -182,7 +182,6 @@ export class LayeredEncryption {
    * Encrypts the provided data using layered encryption.
    * @param data - The data to encrypt.
    * @returns A Promise that resolves to the encrypted data.
-   * @private
    */
   public encrypt(data: any): Promise<string> {
     return this.#EncryptData(data);
@@ -236,7 +235,6 @@ export class LayeredEncryption {
    * Decrypts the provided encrypted data.
    * @param encryptedData - The encrypted data to decrypt.
    * @returns A Promise that resolves to the decrypted data and signature.
-   * @private
    */
   public decrypt<T>(encryptedData: string): Promise<Decrypted<T>> {
     return this.#DecryptData<T>(encryptedData);

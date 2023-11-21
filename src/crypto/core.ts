@@ -11,6 +11,16 @@ export interface Cypher {
 
 export type CypherAlgorithm = 'aes-256-cbc' | 'secp521r1' | 'secp512k1';
 
+
+export interface CryptoService {
+  uuid(): string;
+  nonce(byteLength?: number): Promise<string>;
+  pbkdf2(thing: string, key: string): Promise<string>;
+  hmac512(data: string, key: string): Promise<string>;
+  randomBytes(length: number): Promise<Uint8Array>;
+}
+
+
 export class Crypto {
 
   /**
