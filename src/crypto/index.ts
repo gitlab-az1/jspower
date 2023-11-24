@@ -1,6 +1,12 @@
-export { Crypto } from './core';
 export * as hash from './hash';
 export { Hash } from './hash';
+
+export {
+  Crypto,
+  Cypher,
+  CryptoService,
+  CypherAlgorithm,
+} from './core';
 
 export {
   AsymmetricSupportedAlgorithms,
