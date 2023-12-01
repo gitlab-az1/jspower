@@ -63,7 +63,6 @@ async function main() {
     const stats = await fs.promises.stat(current);
 
     if(!stats.isFile()) continue;
-    if(!current.endsWith('.d.ts')) continue;
 
     await fs.promises.copyFile(current, path.join(buildDir, 'types', item));
   }
