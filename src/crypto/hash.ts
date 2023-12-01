@@ -22,6 +22,17 @@ export class Hash {
   public static sha512(data: string): string {
     return CryptoJS.SHA512(data).toString(CryptoJS.enc.Hex);
   }
+
+  /**
+   * Deep compare two hashes
+   * 
+   * @param src 
+   * @param target 
+   * @returns 
+   */
+  public static equals(src: string, target: string): boolean {
+    return src.toLowerCase() === target.toLowerCase();
+  }
 }
 
 export default Hash;

@@ -45,7 +45,8 @@ async function recursiveRemoveUnnecessaryFiles(dir) {
     } else if(
       /.spec./.test(filename) /* ||
       filename === '_types.js'*/ ||
-      filename.endsWith('.tmp')
+      filename.endsWith('.tmp') ||
+      filename.indexOf('.d.js') > -1
     ) {
       await fs.promises.unlink(path.join(dir, filename));
     }
@@ -62,6 +63,8 @@ async function main() {
     const stats = await fs.promises.stat(current);
 
     if(!stats.isFile()) continue;
+    if(!current.endsWith('.d.ts')) continue;
+
     await fs.promises.copyFile(current, path.join(buildDir, 'types', item));
   }
 
