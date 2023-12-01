@@ -55,18 +55,7 @@ async function recursiveRemoveUnnecessaryFiles(dir) {
 
 
 async function main() {
-  await recursiveRemoveDirectoryFiles(path.join(buildDir, 'types'));
-  await fs.promises.mkdir(path.join(buildDir, 'types'), { mode: 0o755, recursive: true });
-
-  for(const item of (await fs.promises.readdir(path.join(srcDir, 'types')))) {
-    const current = path.join(srcDir, 'types', item);
-    const stats = await fs.promises.stat(current);
-
-    if(!stats.isFile()) continue;
-
-    await fs.promises.copyFile(current, path.join(buildDir, 'types', item));
-  }
-
+//   await recursiveRemoveDirectoryFiles(path.join(buildDir, 'types'));
   await recursiveRemoveUnnecessaryFiles(buildDir);
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires

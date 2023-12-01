@@ -69,3 +69,6 @@ export interface CommonHttpHeaders {
 export interface HttpHeaders extends CommonHttpHeaders {
   [key: string]: string | undefined;
 }
+
+
+export function __DO_NOT_USE__http() {}

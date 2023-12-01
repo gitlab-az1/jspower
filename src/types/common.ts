@@ -39,3 +39,5 @@ export type ErrorLocation = {
     params: string[];
   };
 }
+
+export function __DO_NOT_USE__common() {}
