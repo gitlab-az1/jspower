@@ -207,10 +207,7 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 ### Data Structures
 
 #### Tree
-  - **BinaryTree** A class for creating binary trees.
-  - **HierarchicalTree** A class for creating hierarchical trees.
-
-- **HashTable** A class for creating hash tables.
+--
 
 
 ## Installation
