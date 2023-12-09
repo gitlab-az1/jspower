@@ -1,4 +1,5 @@
-import { GenericFunction } from '../types';
+import { isIterableIterator } from '../iterator';
+import type { GenericFunction } from '../types';
 import { is } from './index';
 
 
@@ -89,5 +90,12 @@ export function assertJSON(value: unknown): asserts value is string {
     JSON.parse(value);
   } catch {
     throw new TypeError(`Expected JSON string, got ${typeof value}`);
+  }
+}
+
+
+export function assertIterableIterator<T>(value: unknown): asserts value is IterableIterator<T> {
+  if(!isIterableIterator(value)) {
+    throw new TypeError(`Expected iterable iterator, got ${typeof value}`);
   }
 }
