@@ -1,6 +1,6 @@
 {
   "name": "typesdk",
-  "version": "1.4.6",
+  "version": "1.5.0",
   "main": "dist/index.js",
   "repository": "https://github.com/gitlab-az1/typesdk.git",
   "author": "gitlab-az1 <gitlab.az1@gmail.com>",
@@ -10,8 +10,8 @@
   },
   "scripts": {
     "build": "tsc --emitDeclarationOnly && babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored && node ./post-build.js",
-    "hot": "yarn build && clear && node ./dist/index.js && rm -r ./dist/",
-    "spec": "clear && jest --verbose"
+    "hot": "tsc --noEmit && yarn build && clear && node ./dist/index.js && rm -r ./dist/",
+    "spec": "clear && tsc --noEmit && jest --verbose"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",

@@ -161,12 +161,7 @@ export class Process {
           message,
         );
 
-        if(code === 0 || this._nothrow) {
-          this._resolve(output);
-        } else {
-          this._reject(output);
-        }
-        
+        this[`_${code === 0 || this._nothrow ? 'resolve' : 'reject'}`](output);
         this._resolved = true;
       });
 

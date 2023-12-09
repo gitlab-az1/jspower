@@ -1,0 +1,1 @@
+export { crc32, validateCRC32Table, crc32Table } from './crc32';

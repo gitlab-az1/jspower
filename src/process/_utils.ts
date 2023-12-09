@@ -1,7 +1,8 @@
+import { promisify } from 'node:util';
+
 import { Exception } from '../errors/exception';
 import psTreeModule from './ps-tree.module';
 import type { Duration } from './_types';
-import { promisify } from 'node:util';
 
 
 export const psTree = promisify(psTreeModule);
@@ -121,7 +122,7 @@ export function errnoMessage(errno: number | undefined): string {
       76: 'Given log. name not unique',
       77: 'f.d. invalid for this operation',
       78: 'Remote address changed',
-      79: 'Can   access a needed shared lib',
+      79: 'Can access a needed shared lib',
       80: 'Accessing a corrupted shared lib',
       81: '.lib section in a.out corrupted',
       82: 'Attempting to link in too many libs',

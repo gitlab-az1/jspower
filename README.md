@@ -189,7 +189,11 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 ### Date and Time
 - **parseTimeString** Parse a time string into a `Date` object.
 
-### Next.JS (Not Implemented)
+### Next.JS
+- #### Middleware
+  Middleware controller for Next.JS APIs.
+
+  - **requestMethod** A middleware for checking the request method.
 
 ### Dotenv
 - Load environment variables from a `.env` file into `process.env`.
@@ -208,6 +212,19 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 #### Tree
 --
+
+### Validators
+- **json** Check if a string is a valid JSON string.
+- **serializable** Check if a value is serializable to JSON.
+- **email** Check if a string is a valid email address.
+
+
+### Stack
+A stack data structure with a `Stack` class.
+
+
+### Algorithms
+- **crc32** A CRC32 algorithm for calculating the CRC32 checksum of a string.
 
 
 ## Installation
