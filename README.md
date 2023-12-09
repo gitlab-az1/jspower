@@ -210,8 +210,7 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 ### Data Structures
 
-#### Tree
---
+#### Tree (Not Implemented)
 
 ### Validators
 - **json** Check if a string is a valid JSON string.
