@@ -8,6 +8,7 @@ export function isIterableIterator<T>(value: any): value is IterableIterator<T> 
 }
 
 
+/*
 export class RangeIterator {
   private _start: number;
   private _end: number;
@@ -28,3 +29,4 @@ export class RangeIterator {
     } as any;
   }
 }
+*/
