@@ -233,6 +233,10 @@ A stack data structure with a `Stack` class.
 - **enumerateIterableIterator** A function for enumerating over an iterable object.
 
 
+### Queue (Not Implemented)
+Process jobs asynchronously in a queue.
+
+
 ## Installation
 
 ```bash

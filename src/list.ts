@@ -319,6 +319,24 @@ export class List<T> {
   public reverse(): void {
     this.#Reverse();
   }
+
+  /**
+   * Convert the list to an array.
+   */
+  public toArray(): T[] {
+    const arr: T[] = [];
+    let node: StorageBlock<T> | null = this.#Tree();
+
+    while(node) {
+      if(node.value && node.value != null) {
+        arr.push(node.value);
+      }
+
+      node = node.next;
+    }
+
+    return arr;
+  }
 }
 
 export default List;
