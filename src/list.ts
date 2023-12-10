@@ -265,7 +265,7 @@ export class List<T> {
     return (this.#storage[index] ?? null);
   }
 
-  #Tree(): ReadonlyStorageBlock<T> {
+  #Tree(): ReadonlyStorageBlock<T | null> | null {
     let root = this.#createNode('root', null);
     const rootBlock = root;
 
@@ -290,7 +290,7 @@ export class List<T> {
    * @private
    * @returns The root of the tree structure.
    */
-  public tree(): ReadonlyStorageBlock<T> {
+  public tree(): ReadonlyStorageBlock<T | null> | null {
     return this.#Tree();
   }
 
@@ -325,7 +325,7 @@ export class List<T> {
    */
   public toArray(): T[] {
     const arr: T[] = [];
-    let node: StorageBlock<T> | null = this.#Tree();
+    let node: StorageBlock<T | null> | null = this.#Tree();
 
     while(node) {
       if(node.value && node.value != null) {
@@ -336,6 +336,37 @@ export class List<T> {
     }
 
     return arr;
+  }
+
+  /**
+   * Get the iterator for the list.
+   */
+  public get [Symbol.iterator]() {
+    let current = this.#Tree();
+
+    return {
+      next() {
+        if(!current) return { done: true, value: null };
+        const value = current.value;
+        current = current.next;
+
+        return { done: false, value };
+      },
+    };
+  }
+
+  /**
+   * Get the string representation of the list object instance.
+   */
+  public get [Symbol.toStringTag]() {
+    return '[object List]';
+  }
+
+  /**
+   * Get the array representation of the list.
+   */
+  public get array(): T[] {
+    return this.toArray();
   }
 }
 
