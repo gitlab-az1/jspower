@@ -1,6 +1,9 @@
-import { Exception } from './errors';
+import { Exception } from '../errors';
 
 
+/**
+ * A string representing a time interval.
+ */
 export type DateTimeString = 
   | `${number}ms`
   | `${number}s`

@@ -185,7 +185,9 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 
 ### Date and Time
-- **parseTimeString** Parse a time string into a `Date` object.
+-  ### Parsers
+
+    - **parseTimeString** Parse a time string into a `Date` object.
 
 ### Next.JS
 - #### Middleware
