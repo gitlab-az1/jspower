@@ -1,4 +1,5 @@
 import {
+  ERR_INVALID_ADDRESS,
   ERR_INVALID_SIGNATURE,
   ERR_READ_BUFFER_AS_LITERAL,
   ERR_READ_LITERAL_AS_BUFFER,
@@ -56,10 +57,15 @@ export class AsyncVirtualMemoryStorageDriver {
     }
 
     const signature = Hash.sha512(JSON.stringify(data));
+    const addr = parseInt(address as string, 16);
+
+    if(Number.isNaN(addr) || addr < 0) {
+      throw new Errno(ERR_INVALID_ADDRESS, 'AsyncVirtualMemoryStorageDriver::Write');
+    }
 
     this.#storage.push({
-      address: parseInt(address as string, 16),
       type: 'literal',
+      address: addr,
       signature,
       data,
     }, address as string);
@@ -111,9 +117,14 @@ export class AsyncVirtualMemoryStorageDriver {
     }
 
     const signature = Hash.sha512(data.toString('hex'));
+    const addr = parseInt(address as string, 16);
+
+    if(Number.isNaN(addr) || addr < 0) {
+      throw new Errno(ERR_INVALID_ADDRESS, 'AsyncVirtualMemoryStorageDriver::WriteBuffer');
+    }
 
     this.#storage.push({
-      address: parseInt(address as string, 16),
+      address: addr,
       type: 'Buffer',
       signature,
       size: data.length,
