@@ -126,7 +126,7 @@ export class List<T> {
    * @throws Error if length is provided and is not a number.
    */
   constructor(length?: number) {
-    if(length && (!Number.isNaN(length) || typeof length !== 'number')) {
+    if(length && (Number.isNaN(length) || typeof length !== 'number')) {
       throw new Error('Length must be a number');
     }
 
