@@ -239,7 +239,7 @@ A stack data structure with a `Stack` class.
 Process jobs asynchronously in a queue.
 
 ### ASCOM (Not Implemented)
-Async Client Operations Manager (ASCOM) is a class for managing asynchronous client operations. [Read more](./src/ascom/README.md)
+Async Client Operations Manager (ASCOM) is a service for managing asynchronous client operations. [Read more](./src/ascom/README.md)
 
 
 ## Installation

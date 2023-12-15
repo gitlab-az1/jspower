@@ -30,3 +30,10 @@ export class RangeIterator {
   }
 }
 */
+
+
+const _default = {
+  isIterableIterator,
+};
+
+export default Object.freeze(_default);

@@ -138,3 +138,5 @@ yarn*
 
 /*build*/**/*
 /_s.*.js
+
+/docker.dev/**/*

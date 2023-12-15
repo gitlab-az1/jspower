@@ -338,6 +338,14 @@ export class List<T> {
     return arr;
   }
 
+  public clear() {
+    for(let i = 0; i < this.#storage.length; i++) {
+      this.#storage[i] = null!;
+    }
+
+    (this as unknown as any).#storage = new Array<StorageBlock<T>>(this.#maxBuckets);
+  }
+
   /**
    * Get the iterator for the list.
    */

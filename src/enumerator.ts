@@ -54,4 +54,10 @@ export function enumerateIterableIterator<T>(iterator: EnumerableIterator<T>): E
   return enumerable;
 }
 
-export default enumerateIterableIterator;
+
+
+const _default = {
+  enumerateIterableIterator,
+};
+
+export default Object.freeze(_default);

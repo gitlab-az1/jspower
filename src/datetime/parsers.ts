@@ -65,3 +65,33 @@ export function parseTimeString(timeString: DateTimeString, baseDate?: Date): Da
 
   return now;
 }
+
+
+/**
+ * Parses a relative time string based on the difference between the provided date or timestamp
+ * and the current date. The result is formatted using the Internationalization API's
+ * RelativeTimeFormat.
+ *
+ * @param {Date|number} date The Date object or timestamp (in milliseconds) to calculate relative time from.
+ * @param {string} [lang= en] The language code to use for formatting the relative time (default: 'en').
+ * @returns {string} A string representing the relative time, formatted based on the provided language.
+ */
+export function parseRelativeTimeString(date: Date | number, lang: string = 'en'): string {
+  const timeMs = typeof date === 'number' ? date : date.getTime();
+  const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
+  const cutoffs = [60, 3600, 86400, 86400 * 7, 86400 * 30, 86400 * 365, Infinity];
+  const units = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year'];
+  const unitIndex = cutoffs.findIndex(cutoff => cutoff > Math.abs(deltaSeconds));
+  const divisor = unitIndex ? cutoffs[unitIndex - 1] : 1;
+  const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
+
+  return rtf.format(Math.floor(deltaSeconds / divisor), units[unitIndex] as any);
+}
+
+
+const _default = {
+  parseTimeString,
+  parseRelativeTimeString,
+};
+
+export default Object.freeze(_default);
