@@ -31,7 +31,7 @@ export class HTTPClient {
   }
 
   public get cookies(): CookiesJar {
-    return this.#cookies.clone();
+    return this.#cookies;
   }
 
   async #send(endpoint: string, method: string, options?: Omit<RequestInit, 'method'>): Promise<HTTPResponse> {
