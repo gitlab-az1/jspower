@@ -9,6 +9,49 @@ import { is } from '../utils';
 export * from './drivers';
 
 
+export interface RequestLike {
+  body: any;
+  query: any;
+  params: any;
+  url: string;
+  cookies: any;
+  method: string;
+  signedCookies?: any;
+  originalUrl: string;
+  headers: Dict<string | string[]> | Headers;
+}
+
+
+/**
+ * Represents a response-like object with methods and properties for handling responses.
+ */
+export interface ResponseLike {
+  status(code: number): ResponseLike;
+  send(data: any): ResponseLike;
+  json(data: any): ResponseLike;
+  setHeader(name: string, value: string): ResponseLike;
+  getHeader(name: string): string | string[] | undefined;
+  removeHeader(name: string): ResponseLike;
+  redirect(url: string, code?: number): ResponseLike;
+  end(): void;
+  writeHead(code: number, headers?: Dict<string | string[]>): void;
+  readonly statusCode?: number;
+  readonly writable?: boolean;
+  readonly writableEnded?: boolean;
+  readonly writableFinished?: boolean;
+  readonly headersSent?: boolean;
+  readonly finished?: boolean;
+  readonly connection?: any;
+  readonly socket?: any;
+}
+
+
+/**
+ * Represents a function-like object that can be used as the 'next' function in middleware.
+ */
+export type NextFunctionLike = ((error?: any) => Promise<void> | void);
+
+
 type ClientRequestOptions = RequestOptions & {
   delay?: number;
   headers?: Dict<string> | Headers;
@@ -32,6 +75,14 @@ interface HttpClient {
   head(endpoint: string, options?: ClientRequestOptions): Promise<Response>;
 }
 
+
+/**
+ * Creates an HTTP client with methods for making various types of requests.
+ * @param baseurl - The base URL for the HTTP client.
+ * @param options - Options for configuring the HTTP client.
+ * @returns An HTTP client with methods for making requests.
+ * @throws Exception if an invalid baseurl is provided.
+ */
 export const createClient = (function(baseurl: string | URL, options?: CreateClientOptions): HttpClient {
   if(!is.isString(baseurl) && !(baseurl instanceof URL)) {
     throw new Exception('Invalid baseurl provided, use an string or URL instance.');

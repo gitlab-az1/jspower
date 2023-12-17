@@ -346,7 +346,7 @@ function _dispatchRequest(_RequestProps: RequestProps): Promise<HTTPResponse> {
       !Number.isFinite(props.timeout) ||
       props.timeout <= 0) return responsePromise;
 
-    return Promise.race<HTTPResponse>([
+    return Promise.race([
       responsePromise,
       new Promise((_, reject) => {
         setTimeout(() => {
@@ -355,8 +355,8 @@ function _dispatchRequest(_RequestProps: RequestProps): Promise<HTTPResponse> {
           ac.abort();
           reject();
         }, props.timeout);
-      }),
-    ]);
+      }) ,
+    ]) as Promise<HTTPResponse>;
   }
 
   const driver = (
