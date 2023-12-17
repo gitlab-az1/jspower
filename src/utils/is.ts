@@ -221,6 +221,7 @@ export const isArray = Array.isArray;
  * @returns {boolean} True if value is a plain Object, otherwise false
  */
 export function isPlainObject(val: any): boolean {
+  if(isArray(val)) return false;
   if (kindOf(val) !== 'object' || typeof val !== 'object') return false;
   const prototype = Object.getPrototypeOf(val);
   return (prototype === null || prototype === Object.prototype || Object.getPrototypeOf(prototype) === null) && !(Symbol.toStringTag in val) && !(Symbol.iterator in val);
