@@ -50,6 +50,11 @@ export class HTTPClient {
       ...this.#defaultHeaders.toObject(),
     };
 
+    delete headers.Cookie;
+    delete headers.cookie;
+
+    headers.Cookie = this.#cookies.serialize();
+
     for(const name in headers) {
       req.headers.set(name, headers[name]!);
     }
@@ -74,10 +79,8 @@ export class HTTPClient {
       }
     }
 
-    const cookies = this.#cookies.toArray();
-
-    if(cookies.length > 0) {
-      res.headers.set('Cookie', cookies.map(cookie => `${cookie.name.trim()}=${cookie.value.trim()}`).join('; '));
+    if(this.#cookies.size() > 0) {
+      res.headers.set('Cookie', this.#cookies.serialize());
     }
 
     return res;
