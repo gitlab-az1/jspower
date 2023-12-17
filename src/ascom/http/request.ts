@@ -20,7 +20,8 @@ export enum RequestMethod {
   PATCH,
   HEAD,
   OPTIONS,
-  CONNECT
+  CONNECT,
+  TRACE
 }
 
 /**
@@ -52,12 +53,12 @@ type RequestProps = {
 export function validateRequestMethod(method: string): method is HttpMethod {
   if(!method) return false;
 
-  const validMethods = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options', 'connect'];
+  const validMethods = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options', 'connect', 'trace'];
   return validMethods.includes(method.toLowerCase());
 }
 
 
-function _methodEnumToName(method: RequestMethod): HttpMethod {
+function _methodEnumToName(method: RequestMethod): HttpMethod | 'TRACE' {
   switch(method) {
     case RequestMethod.GET:
       return 'GET';
@@ -75,6 +76,8 @@ function _methodEnumToName(method: RequestMethod): HttpMethod {
       return 'OPTIONS';
     case RequestMethod.CONNECT:
       return 'CONNECT';
+    case RequestMethod.TRACE:
+      return 'TRACE';
     default:
       throw new Error('Invalid request method');
   }
@@ -98,6 +101,8 @@ function _methodNameToEnum(method: HttpMethod): RequestMethod {
       return RequestMethod.OPTIONS;
     case 'connect':
       return RequestMethod.CONNECT;
+    case 'trace':
+      return RequestMethod.TRACE;
     default:
       throw new Error('Invalid request method');
   }
@@ -429,7 +434,7 @@ export class Request {
    * Gets the HTTP method of the request as an HttpMethod enum value.
    * @returns The HttpMethod enum value.
    */
-  public get method(): HttpMethod {
+  public get method(): HttpMethod | 'TRACE' {
     return _methodEnumToName(_methodNameToEnum(this.#method as unknown as HttpMethod));
   }
 

@@ -1,3 +1,5 @@
+import { RequestLike } from '../../http/core';
+import { isPlainObject } from '../../utils/is';
 import List, { ReadonlyStorageBlock } from '../../list';
 
 
@@ -148,6 +150,16 @@ export class CookiesJar {
     return list.tree();
   }
 
+  public clone(): CookiesJar {
+    const jar = new CookiesJar();
+
+    this.#cookies.forEach(cookie => {
+      jar.setCookie(cookie.name, cookie.value, cookie);
+    });
+
+    return jar;
+  }
+
   /**
    * Serializes a single cookie into a string suitable for use in the 'Cookie' HTTP header.
    * @param cookie - The cookie to serialize.
@@ -246,6 +258,27 @@ export class CookiesJar {
     }
 
     return cookieObject;
+  }
+
+  /**
+   * Parses a 'Set-Cookie' HTTP header and returns a corresponding CookiesJar object
+   * @param {RequestLike['headers']} headers The headers object
+   * @returns {CookiesJar} The CookiesJar object
+   */
+  public static fromHeaders(headers: RequestLike['headers']): CookiesJar {
+    const jar = new CookiesJar();
+    const h = isPlainObject(headers) ? 
+      (headers['Set-Cookie'] ?? headers['set-cookie']) :
+      ((headers as unknown as globalThis.Headers).get('Set-Cookie') ?? (headers as unknown as globalThis.Headers).get('set-cookie'));
+
+    if(!h) return jar;
+
+    for(const cookie of (Array.isArray(h) ? h : [h])) {
+      const c = CookiesJar.parseCookie(cookie);
+      jar.setCookie(c.name, c.value, c);
+    }
+
+    return jar;
   }
 
   public [Symbol.toStringTag]() {
