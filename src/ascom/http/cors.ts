@@ -5,6 +5,9 @@ import {
 } from '../../http/core';
 
 
+/**
+ * Configuration for CORS.
+ */
 export type Cors = {
   origin?: string[];
   methods?: string[];
@@ -17,7 +20,18 @@ export type Cors = {
 };
 
 
+/**
+ * CORS middleware function.
+ * @param options - Configuration options for CORS.
+ */
 export default (function(options?: Cors) {
+
+  /**
+   * Checks if the provided origin is allowed.
+   * @param _ - Request object (not used).
+   * @param origin - Origin header value.
+   * @returns True if the origin is allowed, false otherwise.
+   */
   async function _CheckOrigin(_: RequestLike, origin: string | null): Promise<boolean> {
     if(!origin
       || origin == null
@@ -31,6 +45,11 @@ export default (function(options?: Cors) {
     );
   }
 
+  /**
+   * Extracts the origin from the request's headers.
+   * @param request - Request object.
+   * @returns Extracted origin value.
+   */
   function _ExtractOrigin(request: RequestLike): string | null {
     function __getOriginHeaderFromRequestAsObject(): string | null {
       if(request.headers instanceof Headers) return null;
@@ -84,6 +103,8 @@ export default (function(options?: Cors) {
       return host;
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let isOriginHost = false;
   
@@ -110,16 +131,30 @@ export default (function(options?: Cors) {
     return origin;
   }
 
+  /**
+   * Dispatches a 403 Forbidden error for an invalid origin.
+   * @param response - Response object.
+   */
   function _DispatchInvalidOriginError(response: ResponseLike): void {
     response.status(403);
     return response.end();
   }
 
+  /**
+   * Dispatches a success response for CORS preflight options request.
+   * @param response - Response object.
+   */
   function _DispatchOptionsSuccess(response: ResponseLike): void {
     response.status(options?.optionsSuccessStatus ?? 204);
     return response.end();
   }
 
+  /**
+   * Actual middleware function handling CORS headers.
+   * @param _request - Request object.
+   * @param _response - Response object.
+   * @param _next - Next function.
+   */
   return async (_request: RequestLike, _response: ResponseLike, _next: NextFunctionLike) => {
     options ??= {};
 

@@ -131,6 +131,8 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 - **roundToNearestMultiple** Round a number to the nearest multiple of itself.
 
+- **fibonacciBinet** Calculate the nth Fibonacci number using Binet's formula.
+
 ### Process
 - **process promise** Create a fully customizable child process with the `spawn` method and return a promise with the process output.
 
@@ -238,7 +240,7 @@ A stack data structure with a `Stack` class.
 ### Queue (Not Implemented)
 Process jobs asynchronously in a queue.
 
-### ASCOM (Not Implemented)
+### ASCOM (Under Construction)
 Async/Agnostic Client Operations Manager (ASCOM) is a service for managing asynchronous client operations. [View module](./src/ascom/)
 
 

@@ -301,6 +301,26 @@ export function roundToNearestMultiple(x: number): number {
 }
 
 
+/**
+ * Calculates the nth Fibonacci number using Binet's Formula.
+ * Binet's Formula provides an efficient way to compute Fibonacci numbers
+ * using the golden ratio (phi) and its conjugate.
+ *
+ * @param {number} n The position of the desired Fibonacci number (zero-based).
+ * @returns {number} The nth Fibonacci number.
+ */
+export function fibonacciBinet(n: number): number {
+
+  // Golden ratio (phi) = (1 + sqrt(5)) / 2
+  const phi = (1 + nmath.sqrt(5)) / 2;
+
+  // Binet's Formula for Fibonacci numbers
+  // F(n) = round((phi^n - (-phi)^(-n)) / sqrt(5))
+  return nmath.round((phi ** n - (-phi) ** -n) / nmath.sqrt(5));
+}
+
+
+
 
 /**
  * A lot of  matemathical utils, constants and functions to basically do everything you want.
@@ -1495,6 +1515,25 @@ namespace math { // eslint-disable-line @typescript-eslint/no-namespace
     }
 
     return nmath.round(x / x) * x;
+  }
+
+
+  /**
+   * Calculates the nth Fibonacci number using Binet's Formula.
+   * Binet's Formula provides an efficient way to compute Fibonacci numbers
+   * using the golden ratio (phi) and its conjugate.
+   *
+   * @param {number} n The position of the desired Fibonacci number (zero-based).
+   * @returns {number} The nth Fibonacci number.
+   */
+  export function fibonacciBinet(n: number): number {
+    
+    // Golden ratio (phi) = (1 + sqrt(5)) / 2
+    const phi = (1 + sqrt(5)) / 2;
+
+    // Binet's Formula for Fibonacci numbers
+    // F(n) = round((phi^n - (-phi)^(-n)) / sqrt(5))
+    return round((phi ** n - (-phi) ** -n) / sqrt(5));
   }
 }
 

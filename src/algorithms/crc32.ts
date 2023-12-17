@@ -179,7 +179,7 @@ export function validateCRC32Table(_buf: number[]): void {
 
 
 function _calculateCRC32(__buffer: Buffer | number[]): number {
-  if(!Array.isArray(__buffer) || !Buffer.isBuffer(__buffer)) {
+  if(!Array.isArray(__buffer) && !Buffer.isBuffer(__buffer)) {
     throw new Exception('Failed to calculate CRC32', {
       errorCode: 'ERR_INVALID_BUFFER',
       expected: 'Array<number> | Buffer',
@@ -201,8 +201,8 @@ function _calculateCRC32(__buffer: Buffer | number[]): number {
 
 /**
  * Calculates the CRC32 checksum for the given buffer.
- * @param {Buffer} _buf - The buffer for which to calculate the CRC32 checksum.
- * @returns {number} - The calculated CRC32 checksum.
+ * @param {Buffer} _buf The buffer for which to calculate the CRC32 checksum.
+ * @returns {number} The calculated CRC32 checksum.
  * @throws {Exception} Throws an exception if the input buffer is invalid.
  */
 export function crc32(_buf: Buffer): number {
