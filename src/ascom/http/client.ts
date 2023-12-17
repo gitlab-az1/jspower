@@ -44,8 +44,8 @@ export class HTTPClient {
     });
     
     const headers: HttpHeaders = {
-      Origin: this.#baseurl.toString(),
-      Host: this.#baseurl.toString(),
+      //   Origin: this.#baseurl.toString(),
+      //   Host: this.#baseurl.toString(),
       ...options?.headers,
       ...this.#defaultHeaders.toObject(),
     };
