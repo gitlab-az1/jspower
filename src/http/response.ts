@@ -1,8 +1,8 @@
 import HttpStatusCodes from './helpers/status-code';
 import { Exception } from '../errors/exception';
-import { Headers } from './headers';
 import { Comparator } from '../math';
 import { type Dict } from '../types';
+import { Headers } from './headers';
 
 
 export interface IResponse {
@@ -50,7 +50,7 @@ export class BodyParser {
 
     if(!this.#hasBody) {
       this.#bodyUsed = true;
-      text = JSON.stringify('[empty]');
+      text = JSON.stringify('"[empty]"');
     } else {
       text = await this.text();
     }
@@ -60,7 +60,6 @@ export class BodyParser {
 
   public async blob(): Promise<Blob> {
     if(!this.#hasBody) {
-      this.#bodyUsed;
       throw new Exception('Cannot parse an empty response body to blob');
     }
 
@@ -68,12 +67,12 @@ export class BodyParser {
       throw new Exception('Cannot parse body twice.');
     }
 
+    this.#bodyUsed = true;
     return new Blob([this.#buffer]);
   }
 
   public async arrayBuffer(): Promise<ArrayBuffer> {
     if(!this.#hasBody) {
-      this.#bodyUsed;
       throw new Exception('Cannot parse an empty response body to array buffer');
     }
 
@@ -81,6 +80,7 @@ export class BodyParser {
       throw new Exception('Cannot parse body twice.');
     }
 
+    this.#bodyUsed = true;
     return this.#buffer;
   }
 
@@ -94,7 +94,6 @@ export class BodyParser {
 
   async #createStream() {
     if(!this.#hasBody) {
-      this.#bodyUsed;
       throw new Exception('Cannot parse an empty response body to readable stream');
     }
 
@@ -111,6 +110,7 @@ export class BodyParser {
       },
     });
 
+    this.#bodyUsed = true;
     return readableStream;
   }
 
@@ -123,6 +123,8 @@ export class BodyParser {
     if(this.#bodyUsed) {
       throw new Exception('Cannot parse body twice.');
     }
+
+    this.#bodyUsed = true;
 
     const decoder = new TextDecoder(encoding ?? 'utf-8');
     const dataView = new DataView(this.#buffer);
@@ -152,8 +154,8 @@ export class Response extends BodyParser implements IResponse {
 
     this.#body = body;
     this.status = props.status;
-    this.ok = (2 === (props.status / 100 | 0));
     this.headers = Headers.from(props.headers);
+    this.ok = (2 === ((props.status / 100) | 0));
     this.responseTime = Number(Number(props.responseTime).toFixed(2));
 
     const c = new Comparator();

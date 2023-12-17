@@ -116,4 +116,18 @@ describe('ascom/AyncVirtualMemoryStorageDriver', () => {
     expect(array[1]).toHaveProperty('data');
     expect(array[1]).toHaveProperty('size');
   });
+
+  test('should convert a serialized literal block context into the original data', () => {
+    const vm = new AsyncVirtualMemoryStorageDriver();
+    
+    vm.write(0x0, 'Hello, world!');
+    
+    const array = vm.serializeContext();
+    
+    expect(array).toBeInstanceOf(Array);
+    expect(array.length).toBe(1);
+    
+    const data = AsyncVirtualMemoryStorageDriver.convertContextToLiteral(array[0]);
+    expect(data).toBe('Hello, world!');
+  });
 });

@@ -29,6 +29,11 @@ export const ERR_READ_LITERAL_AS_BUFFER = 0x4;
  */
 export const ERR_INVALID_ADDRESS = 0x5;
 
+/**
+ * The environment is not supported
+ */
+export const ERR_ENVIRONMENT_NOT_SUPPORTED = 0x6;
+
 
 /**
  * Get the error message for a given error code from ascom
@@ -45,6 +50,7 @@ export function errnoMessage(code: number): string {
       0x3: 'Cannot read a buffer as a literal object',
       0x4: 'Cannot read a literal object as a buffer',
       0x5: 'Invalid address',
+      0x6: 'Environment not supported',
     })[code < 0 ? code * -1 : code]) || 'Unknown error'
   );
 }

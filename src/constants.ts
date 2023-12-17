@@ -11,10 +11,20 @@ export const isProduction = (process.env.NODE_ENV === 'production' ||
   process.env.NEXT_PUBLIC_NODE_ENV === 'production');
 
 
+/**
+ * Whether the project is running in node-js runtime environment
+ */
 export const isNode = (typeof process !== 'undefined' &&
   Object.prototype.toString.call(process) === '[object process]' &&
   process.release &&
   process.release.name === 'node');
+
+
+/**
+ * Whether the project is running in a browser environment
+ */
+export const isBrowser = (typeof window !== 'undefined' &&
+  typeof document !== 'undefined');
 
 
 /**

@@ -265,7 +265,7 @@ export class List<T> {
     return (this.#storage[index] ?? null);
   }
 
-  #Tree(): ReadonlyStorageBlock<T | null> | null {
+  #Tree(): ReadonlyStorageBlock<T | null> {
     let root = this.#createNode('root', null);
     const rootBlock = root;
 
@@ -290,7 +290,7 @@ export class List<T> {
    * @private
    * @returns The root of the tree structure.
    */
-  public tree(): ReadonlyStorageBlock<T | null> | null {
+  public tree(): ReadonlyStorageBlock<T | null> {
     return this.#Tree();
   }
 
@@ -356,7 +356,7 @@ export class List<T> {
       next() {
         if(!current) return { done: true, value: null };
         const value = current.value;
-        current = current.next;
+        current = current.next!;
 
         return { done: false, value };
       },
