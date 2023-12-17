@@ -53,8 +53,6 @@ export class HTTPClient {
     delete headers.Cookie;
     delete headers.cookie;
 
-    headers.Cookie = this.#cookies.serialize();
-
     for(const name in headers) {
       req.headers.set(name, headers[name]!);
     }
@@ -66,6 +64,7 @@ export class HTTPClient {
     req.headers.delete('user-agent');
 
     req.headers.set('User-Agent', ua ?? this.#ua ?? this._getDefaultUserAgent());
+    req.headers.set('Cookie', this.#cookies.serialize());
 
     const res = await req.dispatch();
     
