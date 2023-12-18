@@ -7,3 +7,8 @@ export interface Logger {
   trace(message: any): void;
   fatal(message: any): void;
 }
+
+
+export type LoggerOptions = {
+  hideDate?: boolean;
+};

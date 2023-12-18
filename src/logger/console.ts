@@ -1,34 +1,34 @@
-import { Logger } from './_types';
+import { Logger, type LoggerOptions } from './_types';
 import { formatMessage } from './_utils';
 
 
-export default (function(): Logger {
+export default (function(options?: LoggerOptions): Logger {
   const info = (message: any): void => {
-    console.log(formatMessage(message, 'info'));
+    console.log(formatMessage(message, 'info', options));
   };
 
   const success = (message: any): void => {
-    console.log(formatMessage(message, 'success'));
+    console.log(formatMessage(message, 'success', options));
   };
 
   const warn = (message: any): void => {
-    console.log(formatMessage(message, 'warn'));
+    console.log(formatMessage(message, 'warn', options));
   };
 
   const error = (message: any): void => {
-    console.log(formatMessage(message, 'error'));
+    console.log(formatMessage(message, 'error', options));
   };
 
   const debug = (message: any): void => {
-    console.log(formatMessage(message, 'debug'));
+    console.log(formatMessage(message, 'debug', options));
   };
 
   const trace = (message: any): void => {
-    console.log(formatMessage(message, 'trace'));
+    console.log(formatMessage(message, 'trace', options));
   };
 
   const fatal = (message: any): void => {
-    console.log(formatMessage(message, 'fatal'));
+    console.log(formatMessage(message, 'fatal', options));
   };
 
   return Object.freeze({

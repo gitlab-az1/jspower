@@ -9,8 +9,10 @@ import {
   ASCI_RESET,
 } from '../utils/asci';
 
+import { type LoggerOptions } from './_types';
 
-export function formatMessage(message: any, level: string): string {
+
+export function formatMessage(message: any, level: string, options?: LoggerOptions): string {
   let color: string;
   const parts = [];
 
@@ -38,7 +40,10 @@ export function formatMessage(message: any, level: string): string {
       break;
   }
 
-  parts.push(`${ASCI_BLUE}${new Date().toISOString()}${ASCI_RESET}`);
+  if(options?.hideDate !== true) {
+    parts.push(`${ASCI_BLUE}${new Date().toISOString()}${ASCI_RESET}`);
+  }
+  
   parts.push(`${color}[${level.toLowerCase()}]${ASCI_RESET}`);
   parts.push(`${ASCI_MAGENTA}(${process.pid})${ASCI_RESET}`);
   
