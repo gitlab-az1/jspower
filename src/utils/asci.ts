@@ -56,3 +56,23 @@ export const format: {
   reset: ASCI_RESET,
   underline: ASCI_UNDERLINE,
 });
+
+
+export async function spinner<T>(
+  title: string,
+  callback: () => T,
+): Promise<T> {
+  let i = 0;
+  const spin = () => process.stderr.write(`  ${'⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'[i++ % 10]} ${title}\r`);
+  const id = setInterval(spin, 100);
+  let result: T;
+
+  try {
+    result = await callback();
+  } finally {
+    clearInterval(id);
+    process.stderr.write(' '.repeat(process.stdout.columns - 1) + '\r');
+  }
+
+  return result;
+}
