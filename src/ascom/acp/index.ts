@@ -1,6 +1,8 @@
 export * from './_abstract';
 
-export * from './broadcaster';
-export * as broadcaster from './broadcaster';
+export * from './core';
 
 export { BroadcastChannel } from './broadcast-channel';
+
+export * from './broadcaster/ee';
+export * from './broadcaster/socket';

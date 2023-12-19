@@ -1,5 +1,6 @@
+import { Crypto } from '../../crypto';
 import { Broadcaster, Client } from './_abstract';
-import { WebSocketBroadcasterRootNode, WebsocketBroadcaster } from './broadcaster/socket';
+import { WebSocketBroadcasterClientNode, WebSocketBroadcasterRootNode, WebsocketBroadcaster } from './broadcaster/socket';
 
 
 export interface WebSocketPoolClient extends Client {
@@ -15,22 +16,42 @@ export interface EventEmitterPoolClient extends Client {
 export interface Pool {
   readonly createdAt: number;
   readonly key: string;
-  readonly name: string;
   readonly port: number;
   readonly url: string;
   readonly version: string;
   readonly clients: (WebSocketPoolClient | EventEmitterPoolClient)[];
+  readonly root: WebSocketBroadcasterRootNode;
   clientsCount(): Promise<number>;
-  addClient(client: WebSocketPoolClient | EventEmitterPoolClient): Promise<void>;
+  createClient(): Promise<WebSocketBroadcasterClientNode>;
   removeClient(client: WebSocketPoolClient | EventEmitterPoolClient): Promise<void>;
   serialize(): object;
 }
 
 
-export async function createPool(serverPort: number = 9999): Promise<Pool> {
-  const root = new WebSocketBroadcasterRootNode(serverPort);
-  await root.createConnection();
+export async function createPool(serverPort: number = 9999, secure: boolean = false): Promise<Pool> {
+  const root = new WebSocketBroadcasterRootNode(serverPort, { secure });
+  await root.createServer();
 
-  // TODO: finish it!
-  return {} as unknown as Pool;
+  const createClient = async () => {
+    const protocol = secure === true ? 'wss:' : 'ws:';
+    const node = new WebSocketBroadcasterClientNode(`${protocol}//127.0.0.1:${serverPort}`, { secure });
+
+    await node.connect();
+    return node;
+  };
+
+  const serialize = () => {
+    return {};
+  };
+
+  return {
+    root,
+    serialize,
+    createClient,
+    port: serverPort,
+    key: Crypto.uuid(),
+    createdAt: Date.now(),
+    version: '0.0.1' as const,
+    url: `${secure === true ? 'wss' : 'ws'}://127.0.0.1:${serverPort}` as const,
+  } as unknown as Pool;
 }

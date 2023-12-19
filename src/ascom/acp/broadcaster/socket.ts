@@ -53,7 +53,7 @@ export enum ReadyState {
 /**
  * Definition of the EventEmitter serialized context
  */
-export type SerializedContext = {
+export type WSSerializedContext = {
   readonly channel: string | object;
   readonly listener: {
     readonly callbackSignature: string;
@@ -68,7 +68,7 @@ export type SerializedContext = {
 /**
  * Options for events subscriber 
  */
-export type SubscribeOptions = {
+export type WSSubscribeOptions = {
   once?: boolean;
 }
 
@@ -104,9 +104,9 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
 
   #rs: ReadyState = ReadyState.Uninitialized;
 
-  constructor(port: number);
   constructor(options: WebSocketBroadcasterInit);
-  constructor(portOrOptions: number | WebSocketBroadcasterInit, options?: Omit<WebSocketBroadcasterInit, 'url'>) {
+  constructor(port: number, options?: Omit<WebSocketBroadcasterInit, 'port'>);
+  constructor(portOrOptions: number | WebSocketBroadcasterInit, options?: Omit<WebSocketBroadcasterInit, 'port'>) {
     let port: number = -1;
 
     if(typeof portOrOptions !== 'number' && isPlainObject(portOrOptions)) {
@@ -114,7 +114,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
       port = portOrOptions.port;
     } else if(typeof portOrOptions === 'string') {
       port = portOrOptions;
-      options ??= { port: -1 };
+      options ??= {};
     } else {
       throw new WebSocketError('Invalid initialization parameters', `::${port}`, ExitCode.InitializationFail, { portOrOptions, options });
     }
@@ -137,12 +137,11 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
     return true;
   }
 
-  public createConnection(): Promise<void> {
+  public createServer(): Promise<void> {
     this.#rs = ReadyState.Connecting;
 
     return Promise.race<void>([
       new Promise<void>((resolve, reject) => {
-    
         if(this.#o?.secure === true) {
           this.#h = http2.createSecureServer({
             ca: this.#o?.ssl?.ca,
@@ -189,6 +188,9 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
       }),
       new Promise<void>((_, reject) => {
         setTimeout(() => {
+          this.#wss?.close();
+          this.#h?.close();
+          
           this.#rs = ReadyState.Error;
           reject(new WebSocketError('Connection timeout', `::${this.#o.port}`, this.#o.secure === true ? ExitCode.HttpsTimeout : ExitCode.HttpTimeout));
         }, 5000);
@@ -203,7 +205,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
    * @param callback - The callback function to be invoked when the event is emitted.
    * @returns A promise that resolves to a listener object with an unsubscribe method.
    */
-  public subscribe<K extends keyof EMap, C extends GenericFunction<any>>(channel: K | Omit<string, K> | IBroadcastChannel, callback: C, options?: SubscribeOptions): Promise<Listener<C>> {
+  public subscribe<K extends keyof EMap, C extends GenericFunction<any>>(channel: K | Omit<string, K> | IBroadcastChannel, callback: C, options?: WSSubscribeOptions): Promise<Listener<C>> {
     if(this.#rs !== ReadyState.Open) {
       throw new WebSocketError('Socket connection is not open', `::${this.#o.port}`, ExitCode.InternalError);
     }
@@ -321,7 +323,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
           calls: listener.calls,
           type: listener.type,
         },
-      } satisfies SerializedContext;
+      } satisfies WSSerializedContext;
     });
 
     return JSON.stringify(arr);
@@ -332,7 +334,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
    * 
    * @returns An iterable iterator for the serialized context.
    */
-  public [Symbol.iterator](): IterableIterator<Enumerable<SerializedContext>[number]> {
+  public [Symbol.iterator](): IterableIterator<Enumerable<WSSerializedContext>[number]> {
     const arr = this.#listeners.toArray().map(([channel, listener]) => {
       return {
         channel: typeof channel === 'string' ? channel : channel.serialize(),
@@ -344,7 +346,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
           calls: listener.calls,
           type: listener.type,
         },
-      } satisfies SerializedContext;
+      } satisfies WSSerializedContext;
     });
 
     return enumerateIterableIterator(arr)[Symbol.iterator]();
@@ -368,7 +370,7 @@ export class WebSocketBroadcasterClientNode<EMap extends Dict<GenericFunction<an
 
   #rs: ReadyState = ReadyState.Uninitialized;
 
-  constructor(url: string);
+  constructor(url: string, options?: Omit<WebSocketBroadcasterInit, 'port'>);
   constructor(options: Omit<WebSocketBroadcasterInit, 'port'> & { url: string });
   constructor(urlOrOptions: string | (Omit<WebSocketBroadcasterInit, 'port'> & { url: string }), options?: Omit<WebSocketBroadcasterInit, 'port'>) {
     let url: string = '';
@@ -440,7 +442,7 @@ export class WebSocketBroadcasterClientNode<EMap extends Dict<GenericFunction<an
    * @param callback - The callback function to be invoked when the event is emitted.
    * @returns A promise that resolves to a listener object with an unsubscribe method.
    */
-  public subscribe<K extends keyof EMap, C extends GenericFunction<any>>(channel: K | Omit<string, K> | IBroadcastChannel, callback: C, options?: SubscribeOptions): Promise<Listener<C>> {
+  public subscribe<K extends keyof EMap, C extends GenericFunction<any>>(channel: K | Omit<string, K> | IBroadcastChannel, callback: C, options?: WSSubscribeOptions): Promise<Listener<C>> {
     if(this.#rs !== ReadyState.Open) {
       throw new WebSocketError('Socket connection is not open', this.#o.url, ExitCode.InternalError);
     }
@@ -557,7 +559,7 @@ export class WebSocketBroadcasterClientNode<EMap extends Dict<GenericFunction<an
           calls: listener.calls,
           type: listener.type,
         },
-      } satisfies SerializedContext;
+      } satisfies WSSerializedContext;
     });
     
     return JSON.stringify(arr);
@@ -568,7 +570,7 @@ export class WebSocketBroadcasterClientNode<EMap extends Dict<GenericFunction<an
    * 
    * @returns An iterable iterator for the serialized context.
    */
-  public [Symbol.iterator](): IterableIterator<Enumerable<SerializedContext>[number]> {
+  public [Symbol.iterator](): IterableIterator<Enumerable<WSSerializedContext>[number]> {
     const arr = this.#listeners.toArray().map(([channel, listener]) => {
       return {
         channel: typeof channel === 'string' ? channel : channel.serialize(),
@@ -580,7 +582,7 @@ export class WebSocketBroadcasterClientNode<EMap extends Dict<GenericFunction<an
           calls: listener.calls,
           type: listener.type,
         },
-      } satisfies SerializedContext;
+      } satisfies WSSerializedContext;
     });
         
     return enumerateIterableIterator(arr)[Symbol.iterator]();

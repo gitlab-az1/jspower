@@ -8,7 +8,7 @@ import { Broadcaster, EmitResponse, IBroadcastChannel, Listener } from '../_abst
 /**
  * Definition of the EventEmitter serialized context
  */
-export type SerializedContext = {
+export type EventEmitterSerializedContext = {
   readonly channel: string | object;
   readonly listener: {
     readonly callbackSignature: string;
@@ -20,7 +20,7 @@ export type SerializedContext = {
   };
 }
 
-export type SubscribeOptions = {
+export type EventEmitterSubscribeOptions = {
   once?: boolean;
 }
 
@@ -35,7 +35,7 @@ export class EventEmitter<EMap extends Dict<GenericFunction<any>> = Dict<Generic
    * @param callback - The callback function to be invoked when the event is emitted.
    * @returns A promise that resolves to a listener object with an unsubscribe method.
    */
-  public subscribe<K extends keyof EMap, C extends GenericFunction<any>>(channel: K | Omit<string, K> | IBroadcastChannel, callback: C, options?: SubscribeOptions): Promise<Listener<C>> {
+  public subscribe<K extends keyof EMap, C extends GenericFunction<any>>(channel: K | Omit<string, K> | IBroadcastChannel, callback: C, options?: EventEmitterSubscribeOptions): Promise<Listener<C>> {
     const eventKey = typeof channel === 'string' ? channel : (channel as IBroadcastChannel)._key;
 
     if(!this.#eventsMap.has(eventKey)) {
@@ -154,7 +154,7 @@ export class EventEmitter<EMap extends Dict<GenericFunction<any>> = Dict<Generic
           calls: listener.calls,
           type: listener.type,
         },
-      } satisfies SerializedContext;
+      } satisfies EventEmitterSerializedContext;
     });
 
     return JSON.stringify(arr);
@@ -165,7 +165,7 @@ export class EventEmitter<EMap extends Dict<GenericFunction<any>> = Dict<Generic
    * 
    * @returns An iterable iterator for the serialized context.
    */
-  public [Symbol.iterator](): IterableIterator<Enumerable<SerializedContext>[number]> {
+  public [Symbol.iterator](): IterableIterator<Enumerable<EventEmitterSerializedContext>[number]> {
     const arr = this.#listeners.toArray().map(([channel, listener]) => {
       return {
         channel: typeof channel === 'string' ? channel : channel.serialize(),
@@ -177,7 +177,7 @@ export class EventEmitter<EMap extends Dict<GenericFunction<any>> = Dict<Generic
           calls: listener.calls,
           type: listener.type,
         },
-      } satisfies SerializedContext;
+      } satisfies EventEmitterSerializedContext;
     });
 
     return enumerateIterableIterator(arr)[Symbol.iterator]();
