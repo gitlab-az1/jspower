@@ -121,6 +121,26 @@ export class Stack<T> {
     return items;
   }
 
+  public findMany(predicate: (value: T, index: number, obj: T[]) => boolean): T[] {
+    return this.#items.filter(predicate);
+  }
+
+  public find(predicate: (value: T, index: number, obj: T[]) => boolean): T | undefined {
+    return this.#items.find(predicate);
+  }
+
+  public findIndex(predicate: (value: T, index: number, obj: T[]) => boolean): number {
+    return this.#items.findIndex(predicate);
+  }
+
+  public deleteByIndex(index: number): T | undefined {
+    return this.#items.splice(index, 1)[0];
+  }
+
+  public getByIndex(index: number): T | undefined {
+    return this.#items[index];
+  }
+
   /**
    * Returns an array of all items in the stack.
    * @returns {T[]} An array of all items in the stack.
