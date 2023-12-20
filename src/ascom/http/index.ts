@@ -1,5 +1,3 @@
-export * from './core';
-
 export * from './cookies-jar';
 export * as cookiesJar from './cookies-jar';
 

@@ -28,7 +28,7 @@ export interface Pool {
 }
 
 
-export async function createPool(serverPort: number = 9999, secure: boolean = false): Promise<Pool> {
+export async function createLocalPool(serverPort: number = 9999, secure: boolean = false): Promise<Pool> {
   const root = new WebSocketBroadcasterRootNode(serverPort, { secure });
   await root.createServer();
 

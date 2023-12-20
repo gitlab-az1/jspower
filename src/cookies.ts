@@ -22,7 +22,7 @@ export type CookieOptions = {
 export interface Cookies {
   setCookie(name: string, value: string, options?: CookieOptions): void;
   readCookie(name: string): string | null;
-  deleteCookie(name: string): void;
+  deleteCookie(name: string, options?: CookieOptions): void;
 }
 
 
@@ -130,8 +130,7 @@ export default (function(): Cookies {
       parts.push(`; SameSite=${mode}`);
     }
 
-    const c = parts.join('');
-    document.cookie = c;
+    document.cookie = parts.join('');
   }
 
   function _read(name: string): string | null {
@@ -139,8 +138,18 @@ export default (function(): Cookies {
     return (match ? decodeURIComponent(match[3]) : null);
   }
 
-  function _delete(name: string): void {
-    _set(name, '', { maxAge: -1 });
+  function _delete(name: string, options?: CookieOptions): void {
+    const parts = [`${name}=;expires=-1`];
+
+    if(options?.path) {
+      parts.push(`; Path=${options.path}`);
+    }
+
+    if(options?.domain) {
+      parts.push(`; Domain=${options.domain}`);
+    }
+
+    document.cookie = parts.join('');
   }
 
   function __parseExpiresFromString(expires: string): Date {
