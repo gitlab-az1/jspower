@@ -65,7 +65,7 @@ function _replaceObjectCirculars(obj: any): any {
     } else if(_isInstanceOf(obj[prop])) {
       safeValues[prop] = `<Ref *${++refsCount}>${obj[prop].constructor.name ? '(' + obj[prop].constructor.name + ')' : ''}`;
     } else if(_isCircularObject(obj[prop])) {
-      safeValues[prop] = `<Circular *${++circularCount}>`;
+      safeValues[prop] = `[Circular *${++circularCount}]`;
     } else {
       safeValues[prop] = obj[prop];
     }
