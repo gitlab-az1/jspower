@@ -63,6 +63,9 @@ export * as stack from './stack';
 export * from './validators';
 export * as validators from './validators';
 
+export * from './safe-json';
+export { default as safeJson } from './safe-json';
+
 
 export {
   ClipboardItem,

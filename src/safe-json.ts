@@ -95,3 +95,11 @@ function _isCircularObject(thing: any): boolean {
     return true;
   }
 }
+
+
+const _default = {
+  safeParse: jsonSafeParser,
+  safeStringify: jsonSafeStringify,
+} as const;
+
+export default Object.freeze(_default);
