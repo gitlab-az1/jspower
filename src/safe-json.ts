@@ -42,6 +42,8 @@ function _replaceArrayCirculars(arr: any[]): any[] {
       safeValues.push(_replaceArrayCirculars(item));
     } else if(typeofTest('object')(item)) {
       safeValues.push(_replaceObjectCirculars(item));
+    } else {
+      safeValues.push(item);
     }
   }
 
