@@ -29,7 +29,6 @@ export function jsonSafeStringify<T>(data: T): string | null {
     const safeData = Array.isArray(data) ? _replaceArrayCirculars(data) : _replaceObjectCirculars(data);
     return JSON.stringify(safeData);
   } catch (err: any) {
-    console.error(err);
     return null;
   }
 }
@@ -59,13 +58,13 @@ function _replaceObjectCirculars(obj: any): any {
     if(typeofTest('object')(obj[prop])) {
       if(Array.isArray(obj[prop])) {
         safeValues[prop] = _replaceArrayCirculars(obj[prop]);
+      } else if(_isInstanceOf(obj[prop])) {
+        safeValues[prop] = `<InstanceRef *${++refsCount}>${obj[prop].constructor.name ? ' (' + obj[prop].constructor.name + ')' : ''}`;
+      } else if(_isCircularObject(obj[prop])) {
+        safeValues[prop] = `[Circular *${++circularCount}]`;
       } else {
-        safeValues[prop] = _replaceObjectCirculars(obj[prop]);
+        safeValues[prop] = obj[prop];
       }
-    } else if(_isInstanceOf(obj[prop])) {
-      safeValues[prop] = `<Ref *${++refsCount}>${obj[prop].constructor.name ? '(' + obj[prop].constructor.name + ')' : ''}`;
-    } else if(_isCircularObject(obj[prop])) {
-      safeValues[prop] = `[Circular *${++circularCount}]`;
     } else {
       safeValues[prop] = obj[prop];
     }
@@ -75,18 +74,11 @@ function _replaceObjectCirculars(obj: any): any {
 }
 
 function _isInstanceOf(thing: any) {
-  if(
-    typeofTest('object')(thing) &&
+  return (
     !isPlainObject(thing) &&
-    !Array.isArray(thing) &&
-    (
-      typeof thing[Symbol.toStringTag] === 'undefined' ||
-        !thing[Symbol.toStringTag]
-    ) &&
-    !thing.toString
-  ) return true;
-
-  return false;
+    Object.getPrototypeOf(thing) !== Object.prototype &&
+    !Object.prototype.hasOwnProperty.call(thing, Symbol.toStringTag)
+  );
 }
 
 function _isCircularObject(thing: any): boolean {
