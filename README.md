@@ -240,6 +240,10 @@ A stack data structure with a `Stack` class.
 ### Queue (Not Implemented)
 Process jobs asynchronously in a queue.
 
+### Safe JSON
+- **safeJSONParse** Parse a JSON string safely without throwing errors.
+- **safeJSONStringify** Stringify a JSON object safely without throwing errors.
+
 ### ASCOM (Under Construction)
 Async/Agnostic Client Operations Manager (ASCOM) is a service for managing asynchronous client operations. [View module](./src/ascom/)
 
