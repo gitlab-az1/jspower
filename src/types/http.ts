@@ -1,5 +1,45 @@
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD' | 'CONNECT';
+/**
+ * A collection of HTTP request methods.
+ */
+export type HttpMethod =
+  | (string & {}) // eslint-disable-line @typescript-eslint/ban-types
+  | 'ACL'
+  | 'BIND'
+  | 'CHECKOUT'
+  | 'CONNECT'
+  | 'COPY'
+  | 'DELETE'
+  | 'GET'
+  | 'HEAD'
+  | 'LINK'
+  | 'LOCK'
+  | 'M-SEARCH'
+  | 'MERGE'
+  | 'MKACTIVITY'
+  | 'MKCALENDAR'
+  | 'MKCOL'
+  | 'MOVE'
+  | 'NOTIFY'
+  | 'OPTIONS'
+  | 'PATCH'
+  | 'POST'
+  | 'PROPFIND'
+  | 'PROPPATCH'
+  | 'PURGE'
+  | 'PUT'
+  | 'REBIND'
+  | 'REPORT'
+  | 'SEARCH'
+  | 'SOURCE'
+  | 'SUBSCRIBE'
+  | 'TRACE'
+  | 'UNBIND'
+  | 'UNLINK'
+  | 'UNLOCK'
+  | 'UNSUBSCRIBE'
+  | 'ALL';
 
+  
 export interface CommonHttpHeaders {
   accept?: string | undefined;
   'accept-language'?: string | undefined;
