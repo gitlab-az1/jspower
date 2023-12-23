@@ -4,7 +4,7 @@ import { isNode } from '../constants';
 
 export class Hash {
 
-  public get promises(): AsyncHash {
+  public static get promises(): AsyncHash {
     return new AsyncHash();
   }
 
