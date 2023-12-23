@@ -133,7 +133,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
     };
   }
 
-  public get isRootNote(): boolean {
+  public get isRootNote(): true {
     return true;
   }
 
@@ -391,7 +391,7 @@ export class WebSocketBroadcasterClientNode<EMap extends Dict<GenericFunction<an
     };
   }
 
-  public get isRootNote(): boolean {
+  public get isRootNote(): false {
     return false;
   }
 

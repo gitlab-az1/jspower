@@ -54,7 +54,7 @@ export function load(options?: EnvOptions) {
 
   if(options?.transformValues) {
     for(const prop in options.transformValues) {
-      if(!process.env[prop]) continue;
+      if(!Object.prototype.hasOwnProperty.call(process.env, prop)) continue;
 
       switch(options.transformValues[prop]) {
         case 'boolean':

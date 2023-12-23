@@ -1,3 +1,4 @@
+import { Either, left, right } from './Either';
 import { isPlainObject, typeofTest } from './utils/is';
 
 
@@ -7,11 +8,12 @@ import { isPlainObject, typeofTest } from './utils/is';
  * @param {string} data A JSON string 
  * @returns {*} The parsed data or null if an error occurred
  */
-export function jsonSafeParser<T>(data: string): T | null {
+export function jsonSafeParser<T>(data: string): Either<Error, T> {
   try {
-    return JSON.parse(data);
-  } catch {
-    return null;
+    const d = JSON.parse(data);
+    return right(d);
+  } catch (err: any) {
+    return left(err instanceof Error ? err : new Error(err.message));
   }
 }
 
@@ -60,7 +62,7 @@ function _replaceObjectCirculars(obj: any): any {
         safeValues[prop] = _replaceArrayCirculars(obj[prop]);
       } else if(_isInstanceOf(obj[prop])) {
         if(Object.prototype.hasOwnProperty.call(obj[prop], Symbol.toStringTag)) {
-          safeValues[prop] = typeof obj[prop][Symbol.toStringTag] === 'string' ? `<InstanceRef *${++refsCount}> (${typeof obj[prop][Symbol.toStringTag] === 'function' ? obj[prop][Symbol.toStringTag]() : obj[prop][Symbol.toStringTag]})` : `<InstanceRef *${++refsCount}>`;
+          safeValues[prop] = typeof obj[prop][Symbol.toStringTag] === 'function' ? obj[prop][Symbol.toStringTag]() : obj[prop][Symbol.toStringTag];
         } else {
           safeValues[prop] = `<InstanceRef *${++refsCount}>${obj[prop].constructor.name ? ' (' + obj[prop].constructor.name + ')' : ''}`;
         }

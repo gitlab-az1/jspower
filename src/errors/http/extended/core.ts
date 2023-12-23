@@ -1,6 +1,7 @@
 import type { Dict } from '../../../types';
 import { Exception } from '../../../errors';
 import { jsonSafeParser, jsonSafeStringify } from '../../../safe-json';
+import { isPlainObject, typeofTest } from 'src/utils/is';
 
 
 export interface SerializedError {
@@ -22,7 +23,7 @@ export class ExtendedSerializableError extends Exception {
   public readonly action: string;
   
   constructor(message: string, options?: ExtendedSerializableErrorOptions) {
-    super(message, options?.context);
+    super(message, options?.context ?? {});
 
     this.errors = options?.errors;
     this.location = options?.location;
@@ -41,15 +42,25 @@ export class ExtendedSerializableError extends Exception {
       statusCode: this.statusCode,
     };
 
-    return (jsonSafeParser<Readonly<ExtendedSerializableErrorOptions> & { readonly message: string }>(
-      jsonSafeStringify(obj)!,
-    ) ?? {
+    const fallbackObject = {
       action: this.action,
-      context: this.context,
+      context: Object.fromEntries(Object.entries(this.context ?? {}).map(([key, value]) => {
+        if(!typeofTest('object')(value)) return [key, value];
+        if(isPlainObject(value)) return [key, value];
+        return [key, `[${typeof value}]`];
+      })),
       errors: this.errors,
       message: this.message,
       location: this.location,
       statusCode: this.statusCode,
-    });
+    };
+
+    const json = jsonSafeStringify(obj);
+    if(!json) return fallbackObject;
+
+    const parsed = jsonSafeParser<ReturnType<typeof this.serialize>>(json);
+    if(parsed.isLeft()) return fallbackObject;
+
+    return parsed.value;
   }
 }

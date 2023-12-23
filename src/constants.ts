@@ -76,9 +76,18 @@ export const FILE_PERMISSION = 0o644;
 export const FOLDER_PERMISSION = 0o755;
 
 
+/**
+ * The maximum value of a 32-bit integer
+ */
+export const MAX_INT_32 = (2 ** 31) - 1;
+
+
 
 export default Object.freeze({
   root,
+  isNode,
+  isBrowser,
+  MAX_INT_32,
   isProduction,
   FILE_PERMISSION,
   FOLDER_PERMISSION,
