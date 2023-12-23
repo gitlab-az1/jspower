@@ -1,7 +1,9 @@
 import type { GenericFunction } from '../types';
 
 export * from './asci';
+export * from './object';
 export * as is from './is';
+export * as object from './object';
 export * as string from './string';
 export * as platform from './platform';
 export { default as wordlist } from './wordlist';
@@ -110,7 +112,6 @@ export function areDeeplyEqual(a: any, b: any): boolean {
   return result;
 }
 
-
 export function debounce<T>(fn: GenericFunction<T>, timeout: number): GenericFunction<void> {
   let _timeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -122,7 +123,6 @@ export function debounce<T>(fn: GenericFunction<T>, timeout: number): GenericFun
     _timeout = setTimeout(() => fn(...args), timeout);
   });
 }
-
 
 export function throttle<T>(fn: GenericFunction<T>, t: number): GenericFunction<void> {
   let argv: Parameters<typeof fn> | null = null;
@@ -143,23 +143,44 @@ export function throttle<T>(fn: GenericFunction<T>, t: number): GenericFunction<
 }
 
 
-export const validHttpMethods = [
-  'get', 
-  'post',
-  'put',
-  'patch',
-  'delete',
-  'options',
-  'head',
-  'trace',
-  'connect',
-];
-
-
-export function getPreciseTime(): number {
+/**
+ * Returns the current time in milliseconds
+ * 
+ * @returns {number} The current time in milliseconds 
+ */
+export function now(): number {
   const time = typeof performance !== 'undefined' && typeof performance.now === 'function' ?
     performance.now() :
     Date.now();
   
   return time;
+}
+
+
+/** The most common HTTP methods */
+export const validHttpMethods = [
+  'get',
+  'post',
+  'put',
+  'patch',
+  'delete',
+  'options',
+  'connect',
+  'trace',
+  'head',
+] as const;
+
+
+/**
+ * Joins an array of strings with a separator
+ * 
+ * @param {any[]} arr Some array
+ * @param {string} [separator=' | '] The separator to use
+ * @returns {string} The joined string
+ */
+export function join<T extends any[]>(arr: T, separator: string = ' | '): string {
+  return arr.map(item => {
+    if(typeof item === 'string') return `'${item}'`;
+    return item;
+  }).join(separator);
 }

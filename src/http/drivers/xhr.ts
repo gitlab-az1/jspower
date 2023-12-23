@@ -1,7 +1,7 @@
 import { BadRequestError, HTTPError, RequestTimeoutError } from '../../errors/http';
 import { CommonHttpHeaders, Dict, type HttpMethod } from '../../types';
-import { validHttpMethods, is, getPreciseTime } from '../../utils';
 import { RequestDriver, RequestOptions } from './_types';
+import { validHttpMethods, is, now } from '../../utils';
 import { assertString } from '../../utils/assertions';
 import { Exception } from '../../errors/exception';
 import { ssrSafeDocument } from '../../ssr';
@@ -128,7 +128,7 @@ class XHRDriver implements RequestDriver {
       this.#xhr.timeout = this.#o.timeout;
     }
 
-    const startTime = getPreciseTime();
+    const startTime = now();
 
     const hasUserAgent = (this.#headers.has('User-Agent') ||
       this.#headers.has('User-agent') ||
@@ -186,7 +186,7 @@ class XHRDriver implements RequestDriver {
 
       const responseObject = new Response(this.#xhr.response, {
         status: this.#xhr.status,
-        responseTime: getPreciseTime() - startTime,
+        responseTime: now() - startTime,
         headers,
       });
 

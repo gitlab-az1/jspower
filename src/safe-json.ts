@@ -59,7 +59,11 @@ function _replaceObjectCirculars(obj: any): any {
       if(Array.isArray(obj[prop])) {
         safeValues[prop] = _replaceArrayCirculars(obj[prop]);
       } else if(_isInstanceOf(obj[prop])) {
-        safeValues[prop] = `<InstanceRef *${++refsCount}>${obj[prop].constructor.name ? ' (' + obj[prop].constructor.name + ')' : ''}`;
+        if(Object.prototype.hasOwnProperty.call(obj[prop], Symbol.toStringTag)) {
+          safeValues[prop] = typeof obj[prop][Symbol.toStringTag] === 'string' ? `<InstanceRef *${++refsCount}> (${typeof obj[prop][Symbol.toStringTag] === 'function' ? obj[prop][Symbol.toStringTag]() : obj[prop][Symbol.toStringTag]})` : `<InstanceRef *${++refsCount}>`;
+        } else {
+          safeValues[prop] = `<InstanceRef *${++refsCount}>${obj[prop].constructor.name ? ' (' + obj[prop].constructor.name + ')' : ''}`;
+        }
       } else if(_isCircularObject(obj[prop])) {
         safeValues[prop] = `[Circular *${++circularCount}]`;
       } else {
@@ -76,8 +80,7 @@ function _replaceObjectCirculars(obj: any): any {
 function _isInstanceOf(thing: any) {
   return (
     !isPlainObject(thing) &&
-    Object.getPrototypeOf(thing) !== Object.prototype &&
-    !Object.prototype.hasOwnProperty.call(thing, Symbol.toStringTag)
+    Object.getPrototypeOf(thing) !== Object.prototype
   );
 }
 

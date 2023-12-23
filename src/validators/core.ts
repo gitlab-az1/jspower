@@ -1,8 +1,8 @@
-import { is } from './utils';
+import { isString } from '../utils/is';
 
 
 export function validateJSON(value: string): boolean {
-  if(!is.isString(value)) return false;
+  if(!isString(value)) return false;
 
   try {
     JSON.parse(value);
@@ -23,7 +23,7 @@ export function validateSerializableObjectToJSON(value: any): boolean {
 
 
 export function validateEmail(value: string): boolean {
-  if(!is.isString(value)) return false;
+  if(!isString(value)) return false;
 
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(value.toLowerCase());
@@ -32,8 +32,8 @@ export function validateEmail(value: string): boolean {
 
 const _default = {
   validateJSON,
-  validateSerializableObjectToJSON,
   validateEmail,
-};
+  validateSerializableObjectToJSON,
+} as const;
 
 export default Object.freeze(_default);

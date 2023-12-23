@@ -1,7 +1,7 @@
-import { getPreciseTime, is } from '../utils';
 import { Response } from './response';
 import type { Dict } from '../types';
 import { Headers } from './headers';
+import { now, is } from '../utils';
 
 
 type RequestOptions = {
@@ -48,7 +48,7 @@ export function powerfetch(url: string | URL, options?: RequestOptions): Promise
   }
 
   return new Promise((resolve, reject) => {
-    const startTime = getPreciseTime();
+    const startTime = now();
 
     fetch(url, Object.assign({}, (options as RequestInit | undefined) ?? {}, { headers })).then(res => {
       res.arrayBuffer().then(buffer => {
@@ -60,7 +60,7 @@ export function powerfetch(url: string | URL, options?: RequestOptions): Promise
 
         const response = new Response(buffer, {
           headers,
-          responseTime: getPreciseTime() - startTime,
+          responseTime: now() - startTime,
           status: res.status,
         });
 

@@ -1,9 +1,9 @@
 import { assertString } from '../../utils/assertions';
 import { BrowserCryptoKey } from '../browser/key';
-import { getPreciseTime } from '../../utils';
 import { Crypto, Cypher } from '../core';
 import { Exception } from '../../errors';
 import { CryptoKey } from '../key';
+import { now } from '../../utils';
 import CryptoJS from 'crypto-js';
 
 
@@ -50,7 +50,7 @@ export class AES {
     const signature = await Crypto.hmac512(data, text);
     const h = JSON.stringify({
       ts: new Date().getTime(),
-      now: getPreciseTime(),
+      now: now(),
       length: data.length,
       signature,
     });
@@ -80,7 +80,7 @@ export class AES {
 
     return Object.freeze({
       payload: JSON.parse(cRaw) as T,
-      age: getPreciseTime() - headers.now,
+      age: now() - headers.now,
       signature: headers.signature,
       currentTimestamp: new Date().getTime(),
       encryptionTimestamp: headers.ts,

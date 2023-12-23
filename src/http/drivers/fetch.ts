@@ -1,7 +1,7 @@
 import { CommonHttpHeaders, Dict, type HttpMethod } from '../../types';
-import { validHttpMethods, is, getPreciseTime } from '../../utils';
 import { HTTPError, RequestTimeoutError } from '../../errors/http';
 import { RequestDriver, RequestOptions } from './_types';
+import { validHttpMethods, is, now } from '../../utils';
 import { assertString } from '../../utils/assertions';
 import { Exception } from '../../errors/exception';
 import { version } from '../../utils/_appversion';
@@ -126,7 +126,7 @@ class FetchDriver implements RequestDriver {
   }
 
   async #CreateFetchPromise(): Promise<Response> {
-    const startTime = getPreciseTime();
+    const startTime = now();
 
     const hasUserAgent = (
       this.#headers.get('User-Agent') ||
@@ -164,7 +164,7 @@ class FetchDriver implements RequestDriver {
           const responseObject = new Response(buffer, {
             headers,
             status: res.status,
-            responseTime: getPreciseTime() - startTime,
+            responseTime: now() - startTime,
           });
   
           this.#readyState = ReadyState.DONE;

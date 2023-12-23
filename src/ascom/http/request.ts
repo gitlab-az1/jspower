@@ -1,9 +1,9 @@
+import { now } from '../../utils';
 import { State } from '../../state';
 import { Exception } from '../../errors';
 import { ssrSafeWindow } from '../../ssr';
 import { isBrowser } from '../../constants';
 import { Headers } from '../../http/headers';
-import { getPreciseTime } from '../../utils';
 import { Response as HTTPResponse } from '../../http/response';
 import { isPlainObject, isStream, isString } from '../../utils/is';
 import { HttpHeaders, type HttpMethod, type Dict } from '../../types';
@@ -139,7 +139,7 @@ function _dispatchRequest(_RequestProps: RequestProps): Promise<HTTPResponse> {
       return result;
     }
 
-    const startTime = getPreciseTime();
+    const startTime = now();
 
     const method = _methodEnumToName(props.method ?? RequestMethod.GET);
     const headers = new Headers(props.headers);
@@ -235,7 +235,7 @@ function _dispatchRequest(_RequestProps: RequestProps): Promise<HTTPResponse> {
         }
   
         setTimeout(() => {
-          const endTime = getPreciseTime() - 250;
+          const endTime = now() - 250;
   
           const responseObject = new HTTPResponse(xhr.response, {
             status: xhr.status,
@@ -273,7 +273,7 @@ function _dispatchRequest(_RequestProps: RequestProps): Promise<HTTPResponse> {
     const headers = new Headers(props.headers);
     const abortReason = new State<string>('');
 
-    const startTime = getPreciseTime();
+    const startTime = now();
     const ac = new AbortController();
     
     if(props.signal) {
@@ -334,7 +334,7 @@ function _dispatchRequest(_RequestProps: RequestProps): Promise<HTTPResponse> {
         }
 
         response.arrayBuffer().then(buffer => {
-          const endTime = getPreciseTime();
+          const endTime = now();
           const responseObject = new HTTPResponse(buffer, {
             headers: h,
             status: response.status,
