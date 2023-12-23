@@ -1,7 +1,7 @@
 import type { Dict } from '../../../types';
 import { Exception } from '../../../errors';
+import { isPlainObject, typeofTest } from '../../../utils/is';
 import { jsonSafeParser, jsonSafeStringify } from '../../../safe-json';
-import { isPlainObject, typeofTest } from 'src/utils/is';
 
 
 export interface SerializedError {
