@@ -1,7 +1,12 @@
 import CryptoJS from 'crypto-js';
+import { isNode } from '../constants';
 
 
 export class Hash {
+
+  public get promises(): AsyncHash {
+    return new AsyncHash();
+  }
 
   /**
    * Simple synchronous sha256 hash
@@ -34,5 +39,42 @@ export class Hash {
     return src.toLowerCase() === target.toLowerCase();
   }
 }
+
+
+export class AsyncHash {
+
+  /**
+   * Hashes the given data with sha256 algorithm
+   * 
+   * @param {string} data The data to hash 
+   * @returns {string} The hash
+   */
+  public async sha256(data: string): Promise<string> {
+    if(!isNode) return Promise.resolve<string>(CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex));
+
+    const __crypt = await import('node:crypto');
+    const hash = __crypt.createHash('sha256');
+    hash.update(data);
+
+    return hash.digest('hex');
+  }
+
+  /**
+   * Hashes the given data with sha512 algorithm
+   * 
+   * @param {string} data The data to hash 
+   * @returns {string} The hash
+   */
+  public async sha512(data: string): Promise<string> {
+    if(!isNode) return Promise.resolve<string>(CryptoJS.SHA512(data).toString(CryptoJS.enc.Hex));
+
+    const __crypt = await import('node:crypto');
+    const hash = __crypt.createHash('sha512');
+    hash.update(data);
+
+    return hash.digest('hex');
+  }
+}
+
 
 export default Hash;
