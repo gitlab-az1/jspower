@@ -2,6 +2,7 @@ export * from './core';
 
 export { GoneError } from './GoneError';
 export { LockedError } from './LockedError';
+export { NotFoundError } from './NotFoundError';
 export { TooEarlyError } from './TooEarlyError';
 export { ConflictError } from './ConflictError';
 export { ForbiddenError } from './ForbiddenError';
