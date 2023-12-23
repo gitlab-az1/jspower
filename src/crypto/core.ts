@@ -117,3 +117,24 @@ export class Crypto {
     return hmac.digest('hex');
   }
 }
+
+
+export const Utf8 = Object.freeze({
+  parse: function (data: string): CryptoJS.lib.WordArray {
+    if (typeof data !== 'string') {
+      data = JSON.stringify(data);
+    }
+
+    return CryptoJS.enc.Utf8.parse(data);
+  },
+  stringify: function<T = string>(data: CryptoJS.lib.WordArray, json: boolean = false): T {
+    const _returned = CryptoJS.enc.Utf8.stringify(data);
+    return json ? JSON.parse(_returned) : _returned;
+  },
+});
+
+
+export const Base64 = Object.freeze({
+  encode: (data: string): string => CryptoJS.enc.Base64.stringify(Utf8.parse(data)),
+  decode: (data: string): string => Utf8.stringify(CryptoJS.enc.Base64.parse(data), false),
+});

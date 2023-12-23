@@ -137,11 +137,36 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
     return true;
   }
 
+  public bind(srv: http2.Http2SecureServer | http.Server): void {
+    if(this.#rs !== ReadyState.Uninitialized) {
+      throw new WebSocketError('Socket connection is already open', `::${this.#o.port}`, ExitCode.InternalError);
+    }
+
+    if(!srv.listening) {
+      throw new WebSocketError('Server is not listening', `::${this.#o.port}`, ExitCode.InitializationFail, { srv });
+    }
+
+    this.#h = srv;
+  }
+
   public createServer(): Promise<void> {
     this.#rs = ReadyState.Connecting;
 
     return Promise.race<void>([
+      // @ts-expect-error not all code paths return a value
       new Promise<void>((resolve, reject) => {
+        if(this.#h && this.#h.listening) return this.#h.on('listening', () => {
+          this.#wss = new WebSocketServer({
+            cors: {
+              origin: '*',
+            },
+          });
+    
+          this.#wss.listen(this.#h as http2.Http2SecureServer);
+          this.#rs = ReadyState.Open;
+          resolve();
+        });
+
         if(this.#o?.secure === true) {
           this.#h = http2.createSecureServer({
             ca: this.#o?.ssl?.ca,
