@@ -153,9 +153,8 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
     this.#rs = ReadyState.Connecting;
 
     return Promise.race<void>([
-      // @ts-expect-error not all code paths return a value
       new Promise<void>((resolve, reject) => {
-        if(this.#h && this.#h.listening) return this.#h.on('listening', () => {
+        if(this.#h && this.#h.listening) return (() => {
           this.#wss = new WebSocketServer({
             cors: {
               origin: '*',
@@ -165,7 +164,7 @@ export class WebSocketBroadcasterRootNode<EMap extends Dict<GenericFunction<any>
           this.#wss.listen(this.#h as http2.Http2SecureServer);
           this.#rs = ReadyState.Open;
           resolve();
-        });
+        })();
 
         if(this.#o?.secure === true) {
           this.#h = http2.createSecureServer({
