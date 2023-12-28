@@ -1,6 +1,6 @@
 {
   "name": "typesdk",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "main": "index.js",
   "repository": "https://github.com/gitlab-az1/typesdk.git",
   "author": "gitlab-az1 <gitlab.az1@gmail.com>",

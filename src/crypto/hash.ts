@@ -52,7 +52,7 @@ export class AsyncHash {
   public async sha256(data: string): Promise<string> {
     if(!isNode) return Promise.resolve<string>(CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex));
 
-    const __crypt = await import('node:crypto');
+    const __crypt = await import('crypto');
     const hash = __crypt.createHash('sha256');
     hash.update(data);
 
@@ -68,7 +68,7 @@ export class AsyncHash {
   public async sha512(data: string): Promise<string> {
     if(!isNode) return Promise.resolve<string>(CryptoJS.SHA512(data).toString(CryptoJS.enc.Hex));
 
-    const __crypt = await import('node:crypto');
+    const __crypt = await import('crypto');
     const hash = __crypt.createHash('sha512');
     hash.update(data);
 
