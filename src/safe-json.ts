@@ -24,12 +24,35 @@ export function jsonSafeParser<T>(data: string): Either<Error, T> {
  * @param {*} data The data to stringify
  * @returns {string} A JSON string or null if an error occurred
  */
-export function jsonSafeStringify<T>(data: T): string | null {
+export function jsonSafeStringify<T>(data: T): string | null;
+
+/**
+ * Safely stringify JSON data
+ * 
+ * @param {*} data The data to stringify
+ * @returns {string} A JSON string or null if an error occurred
+ */
+export function jsonSafeStringify<T>(data: T, replacer: ((this: any, key: string, value: any) => any), space?: string | number): string | null;
+/**
+ * Safely stringify JSON data
+ * 
+ * @param {*} data The data to stringify
+ * @returns {string} A JSON string or null if an error occurred
+ */
+export function jsonSafeStringify<T>(data: T, replacer: (string | number)[], space?: string | number): string | null;
+
+/**
+ * Safely stringify JSON data
+ * 
+ * @param {*} data The data to stringify
+ * @returns {string} A JSON string or null if an error occurred
+ */
+export function jsonSafeStringify<T>(data: T, replacer?: ((this: any, key: string, value: any) => any) | (string | number)[] | null, space?: string | number): string | null {
   if(typeof data !== 'object' && !Array.isArray(data)) return JSON.stringify(data);
 
   try {
     const safeData = Array.isArray(data) ? _replaceArrayCirculars(data) : _replaceObjectCirculars(data);
-    return JSON.stringify(safeData);
+    return JSON.stringify(safeData, replacer as unknown as any, space);
   } catch (err: any) {
     return null;
   }
