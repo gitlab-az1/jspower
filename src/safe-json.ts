@@ -39,7 +39,7 @@ export function jsonSafeStringify<T>(data: T, replacer: ((this: any, key: string
  * @param {*} data The data to stringify
  * @returns {string} A JSON string or null if an error occurred
  */
-export function jsonSafeStringify<T>(data: T, replacer: (string | number)[], space?: string | number): string | null;
+export function jsonSafeStringify<T>(data: T, replacer?: (string | number)[] | null, space?: string | number): string | null;
 
 /**
  * Safely stringify JSON data
