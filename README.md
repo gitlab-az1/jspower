@@ -13,6 +13,8 @@ JSpower is a comprehensive Node.js SDK designed for diverse projects. Please not
 
 - **delay** Delay a promise by a specified amount of time.
 
+- **waitFor** Wait for a condition to be true.
+
 ### Crypto
 - **Asymmetric (Not Implemented)**
   - ECDSA
@@ -237,12 +239,30 @@ A stack data structure with a `Stack` class.
 - **enumerateIterableIterator** A function for enumerating over an iterable object.
 
 
+### Lock
+Class representing a lock with timeout functionality.
+
+
+### PS Client
+A node-js dependent publisher/subscriber client.
+
+
 ### Queue (Not Implemented)
 Process jobs asynchronously in a queue.
+
+
+### Websocket (Not Implemented)
+
+
+### Cache (Not Implemented)
+
 
 ### Safe JSON
 - **safeJSONParse** Parse a JSON string safely without throwing errors.
 - **safeJSONStringify** Stringify a JSON object safely without throwing errors.
+
+### Limiter
+Manages the execution of concurrent jobs with optional intervals between them.
 
 ### ASCOM (Under Construction)
 Async/Agnostic Client Operations Manager (ASCOM) is a service for managing asynchronous client operations. [View module](./src/ascom/)

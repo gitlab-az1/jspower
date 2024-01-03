@@ -1,6 +1,7 @@
-import { Exception } from '../errors/exception';
-import delayPromise from './delay';
 import * as math from '../math';
+import delayPromise from './delay';
+import { Exception } from '../errors/exception';
+import { createRetry } from '../ps-client/retry';
 
 
 type RetryOptions = {
@@ -45,5 +46,7 @@ export async function asyncRetry<T>(
 
   throw new Exception(`Retry failed after ${retries} attempts.`, { context: { function: fn.toString() } });
 }
+
+export const createAdvancedRetry = createRetry;
 
 export default asyncRetry;

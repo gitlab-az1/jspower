@@ -140,3 +140,4 @@ yarn*
 /_s.*.js
 
 /docker.dev/**/*
+/src/test.ts

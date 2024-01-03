@@ -67,7 +67,7 @@ export class Database {
     };
   }
 
-  async #_checkForTooManyConnections(client: PoolClient): Promise<boolean> {
+  async #checkForTooManyConnections(client: PoolClient): Promise<boolean> {
     const currentTime = new Date().getTime();
     const openedConnectionsMaxAge = 5000;
     const maxConnectionsTolerance = 0.8;
@@ -120,7 +120,7 @@ export class Database {
       deferredQueryPromise.reject(new Exception(err.message ?? err, { status: err.code || 500}));
     } finally {
       if(client && !options?.transaction) {
-        const tooManyConnections = await this.#_checkForTooManyConnections(client);
+        const tooManyConnections = await this.#checkForTooManyConnections(client);
         client.release();
 
         if(tooManyConnections) {
@@ -180,7 +180,7 @@ export class Database {
    * @returns A promise that resolves to a boolean indicating if there are too many connections.
    */
   public checkForTooManyConnections(client: PoolClient): Promise<boolean> {
-    return this.#_checkForTooManyConnections(client);
+    return this.#checkForTooManyConnections(client);
   }
 
   /**
@@ -254,12 +254,14 @@ export async function connect(): Promise<Database> {
   if(!process.env.TYPESDK_DEFAULTS_POSTGRES_CONNECTION_STRING || process.env.TYPESDK_DEFAULTS_POSTGRES_CONNECTION_STRING.trim().length < 1) {
     throw new Exception('Postgres connection string not found. Define in your environment variables with the name `TYPESDK_DEFAULTS_POSTGRES_CONNECTION_STRING`', {
       status: 500,
+      statusCode: 500,
     });
   }
 
   if(!process.env.POSTGRES_DB || process.env.POSTGRES_DB.trim().length < 1) {
     throw new Exception('The environment variable `POSTGRES_DB` is required to check opened connections and more.', {
       status: 500,
+      statusCode: 500,
     });
   }
 

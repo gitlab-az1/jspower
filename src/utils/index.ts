@@ -2,7 +2,9 @@ import type { GenericFunction } from '../types';
 
 export * from './asci';
 export * from './object';
+export * from './buffer';
 export * as is from './is';
+export * as buffer from './buffer';
 export * as object from './object';
 export * as string from './string';
 export * as platform from './platform';
@@ -183,4 +185,50 @@ export function join<T extends any[]>(arr: T, separator: string = ' | '): string
     if(typeof item === 'string') return `'${item}'`;
     return item;
   }).join(separator);
+}
+
+/**
+ * Returns a function that can only be called once
+ * 
+ * @param fn The function to wrap 
+ * @returns The wrapped function
+ */
+export function once<T>(fn: (...args: any[]) => T): (...args: any[]) => T {
+  let called = false;
+  let result: T;
+
+  return (...args: any[]) => {
+    if(called) return result;
+
+    called = true;
+    return (result = fn(...args));
+  };
+}
+
+
+/**
+ * Maps an object to a new object
+ * 
+ * @param {object} obj The object to map 
+ * @param {Function} mapper The mapper function 
+ * @returns {object} The mapped object
+ */
+export function map<T extends Record<string | number | symbol, any>, V, K extends string | number | symbol>(obj: Record<K, V>, mapper: ((key: K, value: V) => any)): T {
+  return Object.entries(obj).reduce((accumulator, [key, value]) => {
+    return {
+      ...accumulator,
+      [key]: mapper(key as K, value as V),
+    };
+  }, {} as T);
+}
+
+
+/**
+ * Removes duplicate values from an array
+ * 
+ * @param {any[]} arr The array to remove duplicates from 
+ * @returns {any[]} The array without duplicates
+ */
+export function uniq<T extends unknown[]>(arr: T): T {
+  return [...new Set(arr)] as T;
 }
