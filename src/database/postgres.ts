@@ -54,7 +54,7 @@ export class Database {
       Object.assign(this.#config, connection);
     }
 
-    if(!isProduction || process.env.SSL_MODE !== 'require') {
+    if(!isProduction && process.env.SSL_MODE !== 'require') {
       delete this.#config.ssl;
     }
 
