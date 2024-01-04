@@ -2,9 +2,7 @@ import type { GenericFunction } from '../types';
 
 export * from './asci';
 export * from './object';
-export * from './buffer';
 export * as is from './is';
-export * as buffer from './buffer';
 export * as object from './object';
 export * as string from './string';
 export * as platform from './platform';
