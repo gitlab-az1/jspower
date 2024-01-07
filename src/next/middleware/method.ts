@@ -12,6 +12,7 @@ export function requestMethod(handler: RequestHandler, method: HttpMethod): Requ
         error: `Method ${request.method} not allowed`,
         errorCode: 'ERR_METHOD_NOT_ALLOWED',
         status: 405,
+        statusCode: 405,
       });
 
       response.end();

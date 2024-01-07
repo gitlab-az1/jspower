@@ -59,7 +59,7 @@ export function jsonSafeStringify<T>(data: T, replacer?: ((this: any, key: strin
 }
 
 function _replaceArrayCirculars(arr: any[]): any[] {
-  const safeValues = new Array(arr.length);
+  const safeValues = [];
 
   for(const item of arr) {
     if(Array.isArray(item)) {
