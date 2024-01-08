@@ -74,6 +74,7 @@ export function powerfetch(url: string | URL, options?: RequestOptions): Promise
 
 type ClientOptions = {
   defaultHeaders?: Dict<string> | Headers | globalThis.Headers;
+  credentials?: RequestCredentials;
 }
 
 interface Client {
@@ -89,8 +90,8 @@ interface Client {
 }
 
 
-export function create(baseurl: string | URL, options?: ClientOptions): Client {
-  const dh = options?.defaultHeaders ? Headers.from(options.defaultHeaders) : new Headers();
+export function create(baseurl: string | URL, clientOptions?: ClientOptions): Client {
+  const dh = clientOptions?.defaultHeaders ? Headers.from(clientOptions.defaultHeaders) : new Headers();
 
   function get(endpoint: string, options?: RequestOptions): Promise<Response> {
     let p = new Headers();
@@ -107,6 +108,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
 
     options ??= {};
     options.method = 'GET';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
 
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -130,6 +135,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
     
     options ??= {};
     options.method = 'POST';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
     
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -153,6 +162,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
         
     options ??= {};
     options.method = 'PUT';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
         
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -176,6 +189,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
                     
     options ??= {};
     options.method = 'PATCH';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
                     
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -199,6 +216,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
                                 
     options ??= {};
     options.method = 'TRACE';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
                                 
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -222,6 +243,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
                                             
     options ??= {};
     options.method = 'DELETE';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
                                             
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -245,6 +270,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
                                                         
     options ??= {};
     options.method = 'OPTIONS';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
                                                         
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -268,6 +297,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
                                                                     
     options ??= {};
     options.method = 'CONNECT';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
                                                                     
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
@@ -291,6 +324,10 @@ export function create(baseurl: string | URL, options?: ClientOptions): Client {
                                                                                     
     options ??= {};
     options.method = 'HEAD';
+
+    if(typeof clientOptions?.credentials !== 'undefined') {
+      options.credentials ??= clientOptions.credentials;
+    }
                                                                                     
     if(Object.keys(headers).length > 0) {
       options.headers = headers;
