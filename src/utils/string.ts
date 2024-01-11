@@ -81,6 +81,37 @@ export function reverseString(str: string): string {
 
 
 /**
+ * Inserts a space at every two characters in the given string.
+ * 
+ * @param {string} inputString The input string to be modified.
+ * @returns {string} The modified string with spaces inserted every two characters.
+ */
+export function insertSpaceEveryTwoCharacters(inputString: string): string {
+  // Use a regular expression to insert a space every two characters
+  const spacedString = inputString.replace(/(.{2})/g, '$1 ');
+
+  // Remove trailing space, if any
+  return spacedString.trim();
+}
+
+/**
+ * Inserts a space at every `x` characters in the given string.
+ * 
+ * @param {string} inputString The input string to be modified. 
+ * @param {number} interval The interval at which to insert a space.
+ * @param {string} separator The separator to use. Defaults to a space.
+ * @returns {string} The modified string with spaces inserted every `x` characters.
+ */
+export function insertEvery(inputString: string, interval: number, separator: string = ' '): string {
+  // Use a regular expression created from the interval to insert a space every `x` characters
+  const spacedString = inputString.replace(new RegExp(`(.{${interval}})`, 'g'), `$1${separator}`);
+    
+  // Remove trailing space, if any
+  return spacedString.trim();
+}
+
+
+/**
  * Capitalize the first letter of each word in the specified string.
  * 
  * @param {string} str 
