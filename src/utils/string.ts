@@ -107,7 +107,8 @@ export function insertEvery(inputString: string, interval: number, separator: st
   const spacedString = inputString.replace(new RegExp(`(.{${interval}})`, 'g'), `$1${separator}`);
     
   // Remove trailing space, if any
-  return spacedString.trim();
+  const output = spacedString.trim();
+  return output.charAt(-1) === separator ? output.slice(0, -1) : output;
 }
 
 
