@@ -108,7 +108,7 @@ export function insertEvery(inputString: string, interval: number, separator: st
     
   // Remove trailing space, if any
   const output = spacedString.trim();
-  return output.charAt(-1) === separator ? output.slice(0, -1) : output;
+  return output.charAt(output.length - 1) === separator ? output.slice(0, -1) : output;
 }
 
 
